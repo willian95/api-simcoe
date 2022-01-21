@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//Auth::routes(['register' => false]);
+
+Route::group(['middleware' => ['VerifyToken']], function() {
+    
+    /************************************Login**************************************/
+    //ADMIN LOGIN
+    Route::get('/admin/login', 'User\UserController@authenticate')->name("admin.login");
+
+    //ADMIN REGISTER
+    Route::get('/admin/register', 'User\UserController@register')->name("admin.register");
+
 });
+
+
