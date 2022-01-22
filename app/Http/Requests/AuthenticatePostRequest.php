@@ -24,7 +24,8 @@ class AuthenticatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            'email'=>'required|email|unique:users',
+            'email'=>'required|email',
+            'password'=>'required',
         ];
     }
 
@@ -33,6 +34,7 @@ class AuthenticatePostRequest extends FormRequest
         return [
             'email.required'=>'Email is required',
             'email.email'=>'Email is invalidity',
+            'password.required'=>'Password is required',
         ];
 
     }
