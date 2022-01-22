@@ -16,4 +16,3 @@ use App\Http\Controllers\User\UserController;
 
 
 
-route::post('/admin/upload-file', [FileController::class, 'upload'])->name("admin.upload-file");
