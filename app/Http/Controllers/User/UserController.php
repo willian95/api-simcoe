@@ -5,16 +5,18 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\AuthenticatePostRequest;
-use App\Http\Requests\UserStorePostRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Log;
 use JWTAuth;
+use DB;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 class UserController extends Controller
 {
-    public function authenticate(Request $request)
+    public function authenticate(AuthenticatePostRequest $request)
     {
 
         $credentials = $request->only('email', 'password');
@@ -71,7 +73,7 @@ class UserController extends Controller
 
     }
 
-    public function register(UserStorePostRequest $request)
+    function register(RegisterRequest $request)
     {
         
         try{

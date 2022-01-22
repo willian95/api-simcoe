@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,19 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Auth::routes(['register' => false]);
-
-/************************************Login**************************************/
-//ADMIN LOGIN
-Route::post('/admin/login', 'User\UserController@authenticate')->name("admin.login");
-
-//ADMIN REGISTER
-Route::post('/admin/register', 'User\UserController@register')->name("admin.register");
-
-Route::group(['middleware' => ['VerifyToken']], function() {
-    
-
-
-});
 
 

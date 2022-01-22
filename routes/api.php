@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(["prefix" => "admin"], function(){
+
+    Route::post('/register', [UserController::class, 'register'])->name("admin.register");
+    Route::post('/login', [UserController::class, 'authenticate'])->name("admin.login");
+
+    /*Route::group(['middleware' => ['VerifyToken']], function() {
+    
+
+
+    });*/
+
 });
