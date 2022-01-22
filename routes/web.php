@@ -14,5 +14,9 @@ use App\Http\Controllers\User\UserController;
 |
 */
 
+Route::view("/", "welcome");
 
+Route::view("/dashboard", "dashboard");
+
+Route::view("/airports", "airports.index")->name("airports.index");
 
