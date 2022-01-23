@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\File\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +19,16 @@ use App\Http\Controllers\User\UserController;
 
 Route::group(["prefix" => "admin"], function(){
 
+    
     Route::post('/register', [UserController::class, 'register'])->name("admin.register");
+
     Route::post('/login', [UserController::class, 'authenticate'])->name("admin.login");
 
-    /*Route::group(['middleware' => ['VerifyToken']], function() {
+
+    Route::group(['middleware' => ['VerifyToken']], function() {
     
+        route::post('/upload-file', [FileController::class, 'upload'])->name("admin.upload-file");
 
-
-    });*/
+    });
 
 });
