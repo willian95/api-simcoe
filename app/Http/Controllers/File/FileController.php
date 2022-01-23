@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\UploadFileRequest;
 use Response,File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Log;
+use DB;
 
 class FileController extends Controller
 {
@@ -33,7 +38,7 @@ class FileController extends Controller
 
             return response()->json(["success" => true,"message" => "File uploaded successfully.","file_route" => $fileRoute, "original_name" => $originName,"extension" => $extension, "type" => $fileType]);
 
-        } catch (JWTException $e) {
+        } catch (\Exception $e) {
 
             Log::error($e);
 
