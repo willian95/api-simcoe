@@ -2,7 +2,12 @@
 
 @section("content")
 
-    <div class="d-flex flex-column-fluid" id="dev-service">
+    <div class="d-flex flex-column-fluid" id="dev-groups">
+
+        <div class="loader-cover-custom" v-if="loading == true">
+			<div class="loader-custom"></div>
+		</div>
+
         <!--begin::Container-->
         <div class="container">
             <!--begin::Card-->
@@ -10,11 +15,12 @@
                 <!--begin::Header-->
                 <div class="card-header flex-wrap border-0 pt-6 pb-0">
                     <div class="card-title">
-                        <h3 class="card-label">Services
+                        <h3 class="card-label">Groups
                     </div>
                     <div class="card-toolbar">
+
                         <!--begin::Button-->
-                        <a href="{{ route('services.create') }}" class="btn btn-primary font-weight-bolder">
+                        <button href="#" class="btn btn-primary font-weight-bolder" data-toggle="modal" data-target="#groupsModal" @click="create()">
                         <span class="svg-icon svg-icon-md">
                             <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -25,7 +31,7 @@
                                 </g>
                             </svg>
                             <!--end::Svg Icon-->
-                        </span>New service</a>
+                        </span>New group</button>
                         <!--end::Button-->
                     </div>
                 </div>
@@ -38,11 +44,7 @@
                             <thead>
                                 <tr >
                                     <th class="datatable-cell datatable-cell-sort" style="width: 170px;">
-                                        <span>Name</span>
-                                    </th>
-
-                                    <th class="datatable-cell datatable-cell-sort" style="width: 170px;">
-                                        <span>Icon</span>
+                                        <span>Group</span>
                                     </th>
 
                                     <th class="datatable-cell datatable-cell-sort" style="width: 170px;">
@@ -51,17 +53,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="service in services">
+                                <tr v-for="group in groups">
                                     <td class="datatable-cell">
-                                        @{{ service.name }}
+                                        @{{ group.name }}
                                     </td>
-                                    <td class="datatable-cell">
-                                        <img :src="service.icon" alt="" style="width: 250px;">
-                                    </td>
-                                    
                                     <td>
-                                        <a class="btn btn-info" :href="'{{ url('/service/edit') }}'+'/'+blog.id"><i class="far fa-edit"></i></a>
-                                        <button class="btn btn-secondary" @click="erase(service.id)"><i class="far fa-trash-alt"></i></button>
+                                        <button class="btn btn-info" data-toggle="modal" data-target="#groupsModal" @click="edit(group)"><i class="far fa-edit"></i></button>
+                                        <button class="btn btn-secondary" @click="erase(group.id)"><i class="far fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -69,25 +67,6 @@
                         
                     </div>
                     <!--end: Datatable-->
-
-                    <div class="row w-100">
-                        <div class="col-sm-12 col-md-5">
-                            <div class="dataTables_info" id="kt_datatable_info" role="status" aria-live="polite">showing page @{{ currentPage }} of @{{ totalPages }}</div>
-                        </div>
-                        <div class="col-sm-12 col-md-7">
-                            <div class="dataTables_paginate paging_full_numbers" id="kt_datatable_paginate">
-                                <ul class="pagination">
-                                    
-                                    <li class="paginate_button page-item active" v-for="(link, index) in links">
-                                        <a style="cursor: pointer" aria-controls="kt_datatable" tabindex="0" :class="link.active == false ? linkClass : activeLinkClass":key="index" @click="fetch(link.url)" v-html="link.label"></a>
-                                    </li>
-                                    
-                                    
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
                 <!--end::Body-->
             </div>
@@ -95,12 +74,14 @@
         </div>
         <!--end::Container-->
 
+        @include('groups.modal')
+
     </div>
 
 @endsection
 
 @push('scripts')
 
-    @include('services.list.script')
+    @include('groups.script')
 
 @endpush

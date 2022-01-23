@@ -20,3 +20,8 @@ Route::view("/dashboard", "dashboard");
 
 Route::view("/airports", "airports.index")->name("airports.index");
 
+Route::view("/services", "services.list.index")->name("services.index");
+Route::view("/services/create", "services.create.index")->name("services.create");
+
+Route::view("/groups", "groups.index")->name("groups.index");
+

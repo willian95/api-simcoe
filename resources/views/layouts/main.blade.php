@@ -155,10 +155,17 @@ License: You must have a valid license purchased only from themeforest(the above
 									</a>
 								</li>
 
-								{{--<li class="menu-item menu-item-submenu @if(strpos(url()->current(), 'banners') > -1) menu-item-active @endif" aria-haspopup="true" data-menu-toggle="hover">
+								<li class="menu-item text-center @if(strpos(url()->current(), 'groups') > -1) menu-item-active @endif" aria-haspopup="true">
+									<a href="{{ route('groups.index') }}" class="menu-link text-center">
+										<i class="menu-icon far fa-file-image"></i>
+										<span class="menu-text">Groups</span>
+									</a>
+								</li>
+
+								<li class="menu-item menu-item-submenu @if(strpos(url()->current(), 'services') > -1) menu-item-active @endif" aria-haspopup="true" data-menu-toggle="hover">
 									<a href="javascript:;" class="menu-link menu-toggle">
 										<i class="menu-icon far fa-file-image"></i>
-										<span class="menu-text">Banners</span>
+										<span class="menu-text">Services</span>
 										<i class="menu-arrow"></i>
 									</a>
 									<div class="menu-submenu">
@@ -169,25 +176,25 @@ License: You must have a valid license purchased only from themeforest(the above
 													<span class="menu-text">Actions</span>
 												</span>
 											</li>
-											<li class="menu-item" aria-haspopup="true">
-												<a href="{{ route('banners.create') }}" class="menu-link">
+											{{--<li class="menu-item" aria-haspopup="true">
+												<a href="{{ route('services.create') }}" class="menu-link">
 													<i class="menu-bullet menu-bullet-line">
 														<span></span>
 													</i>
 													<span class="menu-text">Crear</span>
 												</a>
-											</li>
+											</li>--}}
 											<li class="menu-item" aria-haspopup="true">
-												<a href="{{ route('banners.list') }}" class="menu-link">
+												<a href="{{ route('services.index') }}" class="menu-link">
 													<i class="menu-bullet menu-bullet-line">
 														<span></span>
 													</i>
-													<span class="menu-text">Listado</span>
+													<span class="menu-text">List</span>
 												</a>
 											</li>
 										</ul>
 									</div>
-								</li>--}}
+								</li>
 
 							</ul>
 							<!--end::Menu Nav-->

@@ -1,14 +1,14 @@
 <script>
         
     const app = new Vue({
-        el: '#dev-airports',
+        el: '#dev-groups',
         data(){
             return{
-                modalTitle:"New airport",
+                modalTitle:"New group",
                 name:"",
-                airportId:"",
+                groupId:"",
                 action:"create",
-                airports:[],
+                groups:[],
                 errors:[],
                 pages:0,
                 page:1,
@@ -19,16 +19,16 @@
         methods:{
             
             create(){
-                this.modalTitle = "New airport"
+                this.modalTitle = "New group"
                 this.action = "create"
                 this.name = ""
-                this.airportId = ""
+                this.groupId = ""
 
             },
             store(){
 
                 this.loading = true
-                axios.post("{{ url('/api/admin/airport') }}", {name: this.name})
+                axios.post("{{ url('/api/admin/group') }}", {name: this.name})
                 .then(res => {
                     this.loading = false
                     if(res.data.success == true){
@@ -40,7 +40,7 @@
                         this.name = ""
                         this.fetch()
 
-                        $('#airportsModal').modal('hide')
+                        $('#groupsModal').modal('hide')
                         $('.modal-backdrop').remove()
                     }else{
 
@@ -61,7 +61,7 @@
             update(){
 
                 this.loading = true
-                axios.put("{{ url('admin/airport') }}"+"/"+this.airportId, {name: this.name,})
+                axios.put("{{ url('/admin/group') }}"+"/"+this.groupId, {name: this.name,})
                 .then(res => {
                     this.loading = false
                     if(res.data.success == true){
@@ -71,9 +71,9 @@
                             icon: "success"
                         });
                         this.name = ""
-                        this.airportId = ""
+                        this.groupId = ""
  
-                        $('#airportsModal').modal('hide')
+                        $('#groupsModal').modal('hide')
                         $('.modal-backdrop').remove()
                         this.fetch()
                         
@@ -93,19 +93,19 @@
                 })
 
             },
-            edit(airport){
-                this.modalTitle = "Edit airport"
+            edit(group){
+                this.modalTitle = "Edit group"
                 this.action = "edit"
-                this.name = airport.name
-                this.airportId = airport.id
+                this.name = group.name
+                this.groupId = group.id
 
             },
             fetch(){
 
-                axios.get("{{ url('/api/admin/airport') }}")
+                axios.get("{{ url('/api/admin/group') }}")
                 .then(res => {
 
-                    this.airports = res.data
+                    this.groups = res.data
 
                 })
 
@@ -114,7 +114,7 @@
                 
                 swal({
                     title: "Are you sure?",
-                    text: "You will delete this airport!",
+                    text: "You will delete this group!",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -122,7 +122,7 @@
                 .then((willDelete) => {
                     if (willDelete) {
                         this.loading = true
-                        axios.delete("{{ url('/api/admin/airport') }}", {id: id}).then(res => {
+                        axios.delete("{{ url('/api/admin/group') }}", {id: id}).then(res => {
                             this.loading = false
                             if(res.data.success == true){
                                 swal({
