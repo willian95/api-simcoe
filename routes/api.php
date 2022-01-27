@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\File\FileController;
 use App\Http\Controllers\Airport\AirportController;
+use App\Http\Controllers\Service\ServiceController;
 
 
 /*
@@ -41,6 +42,18 @@ Route::group(["prefix" => "admin"], function(){
         route::delete('/airport/{airport_id}', [AirportController::class, 'destroy'])->name("admin.airport.delete");
     
         route::post('/airport/restore', [AirportController::class, 'restore'])->name("admin.airport.restore");
+
+        //Service
+
+        route::post('/service', [ServiceController::class, 'store'])->name("admin.service");
+
+        route::get('/service', [ServiceController::class, 'list'])->name("admin.service.list");
+    
+        route::put('/service/{service_id}', [ServiceController::class, 'update'])->name("admin.service.update");
+
+        route::delete('/service/{service_id}', [ServiceController::class, 'destroy'])->name("admin.service.delete");
+    
+        route::post('/service/restore', [ServiceController::class, 'restore'])->name("admin.service.restore");
 
 
     });
