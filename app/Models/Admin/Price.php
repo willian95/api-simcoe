@@ -28,6 +28,14 @@ class Price extends Model
         'price_per_stop', 
     ];
 
+    public function Group()
+    {
+
+        return $this->belongsTo('App\Models\Admin\Group','id','group_id');
+        
+
+    } 
+
 }
 
 
