@@ -44,4 +44,23 @@ class Service extends Model
 
     } 
 
+    public function Group()
+    {
+
+        return $this->belongsTo('App\Models\Admin\Group','id','service_id');
+        
+
+    } 
+
+    public function Price()
+    {
+
+        return $this->belongsTo('App\Models\Admin\Price','id','service_id');
+        
+
+    } 
+
+
+    
+
 }

@@ -40,7 +40,9 @@ class ServiceUpdateRequest extends FormRequest
            'info_rates.max_carry_on_bag'=>'required|integer',
            'info_rates.max_stops'=>'required|integer',
             //ServiceType
-           'service_types'=>'required|array',
+            'service_types'=>'required|array',
+            //Price
+            'prices'=>'required|array',
         ];  
 
     }
@@ -71,6 +73,9 @@ class ServiceUpdateRequest extends FormRequest
              //ServiceType
             'service_types.required'=>'service types is required',
             'service_types.array'=>'invalid format',
+            //Price
+            'prices.required'=>'prices is required',
+            'prices.array'=>'invalid format',
         ];
 
     }

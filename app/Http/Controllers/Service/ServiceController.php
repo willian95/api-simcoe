@@ -11,6 +11,7 @@ use App\Http\Requests\ServiceRestoreRequest;
 use App\Models\Admin\Service;
 use App\Models\Admin\ServiceInfoRate;
 use App\Models\Admin\ServiceType;
+use App\Models\Admin\Price;
 use Illuminate\Support\Facades\Validator;
 use Log;
 use DB;
@@ -64,6 +65,26 @@ class ServiceController extends Controller
 
             }
 
+            foreach ($request->prices as $price) {
+
+                $price=Price::create([
+
+                    'airport_id'=>$price['airport_id'],
+                    'service_id'=> $service->id,
+                    'group_id'=>$price['group_id'],
+                    'shared_price'=>$price['shared_price'],	
+                    'private_price'=>$price['private_price'],
+                    'unique_price'=>$price['unique_price'],
+                    'base_borden_price'=>$price['base_borden_price'],
+                    'extra_passnger_fee'=>$price['extra_passnger_fee'],
+                    'extra_family_price'=>$price['extra_family_price'],	
+                    'parking_day_price'=>$price['parking_day_price'],
+                    'price_per_stop'=>$price['price_per_stop'], 
+                    
+                ]);
+
+            }
+
             DB::commit();
 
             return response()->json(["success" => true,"message" => "Registered successfully"], 201);
@@ -88,7 +109,7 @@ class ServiceController extends Controller
     {
         try{
 
-            $service = Service::with(['ServiceInfoRate','ServiceType'])->get();
+            $service = Service::with(['ServiceInfoRate','ServiceType','Group','Price'])->get();
               
             return response()->json(["success" => true,"message" => "Data obtained successfully", "service"=>$service]);
 
@@ -160,6 +181,28 @@ class ServiceController extends Controller
 
             }
 
+            foreach ($request->prices as $price) {
+
+                $price=Price::where("id",$price['id'])->first();
+
+                $price->fill([
+
+                    'airport_id'=>$price['airport_id'],
+                    'service_id'=> $service->id,
+                    'group_id'=>$price['group_id'],
+                    'shared_price'=>$price['shared_price'],	
+                    'private_price'=>$price['private_price'],
+                    'unique_price'=>$price['unique_price'],
+                    'base_borden_price'=>$price['base_borden_price'],
+                    'extra_passnger_fee'=>$price['extra_passnger_fee'],
+                    'extra_family_price'=>$price['extra_family_price'],	
+                    'parking_day_price'=>$price['parking_day_price'],
+                    'price_per_stop'=>$price['price_per_stop'], 
+                    
+                ])->save();
+
+            }
+
             DB::commit();
 
             return response()->json(["success" => true,"message" => "Successful update"], 201);
@@ -195,7 +238,9 @@ class ServiceController extends Controller
 
             $serviceInfoRate=ServiceInfoRate::where('service_id',$id)->delete();
 
-            $serviceType=ServiceType::where('service_id',$id)->delete();    
+            $serviceType=ServiceType::where('service_id',$id)->delete();   
+            
+            $price=Price::where('service_id',$id)->delete();   
 
             $service->delete();
 
@@ -231,6 +276,8 @@ class ServiceController extends Controller
             $serviceInfoRate=ServiceInfoRate::withTrashed()->where('service_id',$request->id)->restore();
 
             $serviceType=ServiceType::withTrashed()->where('service_id',$request->id)->restore();
+
+            $price=Price::withTrashed()->where('service_id',$request->id)->restore();
 
             DB::commit();
 
