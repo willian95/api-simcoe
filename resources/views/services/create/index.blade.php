@@ -31,7 +31,7 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="name">* Icon (jpg,png | Suggested dimenssions: 250x250px | max: 2mb )</label>
+                                <label for="name" title="(jpg,png | Suggested dimenssions: 250x250px | max: 2mb)">* Icon</label>
                                 <input type="file" class="form-control" ref="file" @change="onImageChange" accept="image/*" style="overflow: hidden;">
 
                                 <img id="blah" :src="imagePreview" class="full-image" style="margin-top: 10px; width: 40%">
@@ -163,24 +163,69 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(price, index) in prices">
-                                        <td>@{{ airports.find(data => data.id == price.airport).name }}</td>
+                                        <td>@{{ airports.find(data => data.id == price.airport_id).name }}</td>
                                         <td v-if="hasGroups == 'true'">
-                                            @{{ groups.find(data => data.id == price.group)?.name }}
+                                            @{{ groups.find(data => data.id == price.group_id)?.name }}
                                         </td>
                                         <td v-if="isSharedAndPrivate == 'true'">
-                                            @{{ price.sharedPrice }}
+                                            @{{ price.shared_price }}
                                         </td>
                                         <td v-if="isSharedAndPrivate == 'true'">
-                                            @{{ price.privatePrice }}
+                                            @{{ price.private_price }}
                                         </td>
                                         <td v-if="isSharedAndPrivate == 'false'">
-                                            @{{ price.uniquePrice }}
+                                            @{{ price.unique_price }}
                                         </td>
                                         <td>
                                             <button class="btn btn-success" @click="modalEdit(price, index)" data-toggle="modal" data-target="#servicesPricesModal">
                                                 edit
                                             </button>
                                             <button class="btn btn-secondary" @click="removePrice(index)">
+                                                remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <div class="col-12">
+                            <h3 class="text-center">Service types 
+                                <button href="#" class="btn btn-primary font-weight-bolder" data-toggle="modal" data-target="#servicesTypeModal"> <span class="svg-icon svg-icon-md" @click="serviceTypeModalCreate()">
+                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24"></rect>
+                                            <circle fill="#000000" cx="9" cy="15" r="6"></circle>
+                                            <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3"></path>
+                                        </g>
+                                    </svg>
+                
+                                </button>
+                            </h3>
+                        </div>
+
+                        <div class="col-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Service type name</th>
+                                        <th>Is only for private rides?</th>
+                                        <th>Discount percentage</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(serviceType, index) in serviceTypes">
+                                        <td>@{{ serviceType.name }}</td>
+                                        <td>@{{ serviceType.is_only_private }}</td>
+                                        <td>@{{ serviceType.discount_percentage }}</td>
+                                        <td>
+                                            <button class="btn btn-success" @click="modalServiceTypeEdit(serviceType, index)" data-toggle="modal" data-target="#servicesTypeModal">
+                                                edit
+                                            </button>
+                                            <button class="btn btn-secondary" @click="removeServiceType(index)">
                                                 remove
                                             </button>
                                         </td>
@@ -198,7 +243,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="description">* Description</label>
-                                <textarea rows="3" id="editorDescription"></textarea>
+                                <textarea rows="3" id="editorDescription" v-model="description"></textarea>
                                 <small v-if="errors.hasOwnProperty('description')">@{{ errors['description'][0] }}</small>
                             </div>
                         </div>
@@ -206,7 +251,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="description">* Advice (optional)</label>
-                                <textarea rows="3" id="editorAdvice"></textarea>
+                                <textarea rows="3" id="editorAdvice" v-model="advice"></textarea>
                                 <small v-if="errors.hasOwnProperty('advice')">@{{ errors['advice'][0] }}</small>
                             </div>
                         </div>
@@ -214,7 +259,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="description">* Secondary advice (optional)</label>
-                                <textarea rows="3" id="editorSecondaryAdvice"></textarea>
+                                <textarea rows="3" id="editorSecondaryAdvice" v-model="secondaryAdvice"></textarea>
                                 <small v-if="errors.hasOwnProperty('secondary_advice')">@{{ errors['secondary_advice'][0] }}</small>
                             </div>
                         </div>
@@ -222,7 +267,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="description">* Purchase advice (optional)</label>
-                                <textarea rows="3" id="editorPurchaseAdvice"></textarea>
+                                <textarea rows="3" id="editorPurchaseAdvice" v-model="purchaseAdvice"></textarea>
                                 <small v-if="errors.hasOwnProperty('purchase_advice')">@{{ errors['purchase_advice'][0] }}</small>
                             </div>
                         </div>
@@ -234,7 +279,7 @@
                     <div class="row">
                         <div class="col-12">
                             <p class="text-center">
-                                <button class="btn btn-success" @click="createService()">Create</button>
+                                <button class="btn btn-success" @click="uploadMainImage()">Create</button>
                             </p>
                         </div>
                     </div>
@@ -248,6 +293,7 @@
         <!--end::Container-->
 
         @include("services.create.modal")
+        @include("services.create.modalServiceTypes")
     </div>
 
 @endsection

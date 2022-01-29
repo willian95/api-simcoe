@@ -28,13 +28,17 @@
             store(){
 
                 this.loading = true
-                axios.post("{{ url('/api/admin/airport') }}", {name: this.name})
+                axios.post("{{ url('/api/admin/airport') }}", {name: this.name}, {
+                    headers:{
+                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
                 .then(res => {
                     this.loading = false
                     if(res.data.success == true){
 
                         swal({
-                            text: res.data.msg,
+                            text: res.data.message,
                             icon: "success"
                         });
                         this.name = ""
@@ -45,7 +49,7 @@
                     }else{
 
                         swal({
-                            text: res.data.msg,
+                            text: res.data.message,
                             icon: "error"
                         });
 
@@ -61,13 +65,17 @@
             update(){
 
                 this.loading = true
-                axios.put("{{ url('admin/airport') }}"+"/"+this.airportId, {name: this.name,})
+                axios.put("{{ url('api/admin/airport') }}"+"/"+this.airportId, {name: this.name}, {
+                    headers:{
+                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
                 .then(res => {
                     this.loading = false
                     if(res.data.success == true){
 
                         swal({
-                            text: res.data.msg,
+                            text: res.data.message,
                             icon: "success"
                         });
                         this.name = ""
@@ -80,7 +88,7 @@
                     }else{
 
                         swal({
-                            text: res.data.msg,
+                            text: res.data.message,
                             icon: "error"
                         });
 
@@ -102,10 +110,14 @@
             },
             fetch(){
 
-                axios.get("{{ url('/api/admin/airport') }}")
+                axios.get("{{ url('/api/admin/airport') }}", {
+                    headers:{
+                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
                 .then(res => {
 
-                    this.airports = res.data
+                    this.airports = res.data.airport
 
                 })
 
@@ -122,18 +134,22 @@
                 .then((willDelete) => {
                     if (willDelete) {
                         this.loading = true
-                        axios.delete("{{ url('/api/admin/airport') }}", {id: id}).then(res => {
+                        axios.delete("{{ url('/api/admin/airport') }}"+"/"+id, {
+                            headers:{
+                                "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                            }
+                        }).then(res => {
                             this.loading = false
                             if(res.data.success == true){
                                 swal({
-                                    text: res.data.msg,
+                                    text: res.data.message,
                                     icon: "success"
                                 });
                                 this.fetch()
                             }else{
 
                                 swal({
-                                    text: res.data.msg,
+                                    text: res.data.message,
                                     icon: "error"
                                 });
 

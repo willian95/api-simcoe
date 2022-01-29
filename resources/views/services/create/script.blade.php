@@ -17,6 +17,7 @@
                     {id:3, name: "Group C"}
                 ],
                 prices:[],
+                serviceTypes:[],
 
                 title:"",
                 applySoldOut:"false",
@@ -28,11 +29,16 @@
                 pictureStatus:"",
                 imageProgress:"",
                 imagePreview:"",
+                file:"",
+                finalPictureName:"",
                 hasGroups:'false',
                 isSharedAndPrivate:'false',
                 maxStops:0,
+                description:"",
+                advice:"",
+                secondaryAdvice:"",
+                purchaseAdvice:"",
                 
-
                 modalAction:'create',
                 modalTitle:"Add prices",
                 sharedPrice:"",
@@ -52,8 +58,17 @@
                 modalErrorSharedPrice:"",
                 modalErrorPrivatePrice:"",
                 modalErrorUniquePrice:"",
+
+                modalServiceTypeTitle:"Create service type",
+                modalServiceTypeAction:"create",
+                serviceTypeId:"",
+                serviceTypeName:"",
+                serviceTypeIsOnlyPrivate:"true",
+                serviceTypeDiscountPercentage:"",
                 
-                
+                modalErrorServiceTypeName:"",
+                modalErrorServiceTypeIsOnlyPrivate:"",
+                modalErrorServiceTypeDiscountPercentage:""
 
 
             }
@@ -99,6 +114,17 @@
                 this.modalAction = 'create'
                 this.modalTitle = "Add prices"
                 this.priceId = ""
+                this.sharedPrice = ""
+                this.privatePrice = ""
+                this.uniquePrice = ""
+                this.baseBordenPrice = ""
+                this.extraPassengerFee = ""
+                this.extraFamilyPrice = ""
+                this.parkingDayPrice = ""
+                this.pricePerStops = ""
+                this.selectedAirport = ""
+                this.selectedGroup = ""
+                this.priceId = ""
 
             },
             modalEdit(price, index){
@@ -107,16 +133,16 @@
                 this.modalTitle = "Edit prices"
 
                 this.priceId = index
-                this.sharedPrice = price.sharedPrice
-                this.privatePrice = price.privatePrice
-                this.uniquePrice = price.uniquePrice
-                this.baseBordenPrice = price.baseBordenPrice
-                this.extraPassengerFee = price.extraPassengerFee
-                this.extraFamilyPrice = price.extraFamilyPrice
-                this.parkingDayPrice = price.parkingDayPrice
-                this.pricePerStops = price.pricePerStops
-                this.selectedAirport = price.airport
-                this.selectedGroup = price.group
+                this.sharedPrice = price.shared_price
+                this.privatePrice = price.private_price
+                this.uniquePrice = price.unique_price
+                this.baseBordenPrice = price.base_borden_price
+                this.extraPassengerFee = price.extra_passenger_fee
+                this.extraFamilyPrice = price.extra_family_price
+                this.parkingDayPrice = price.parking_day_rice
+                this.pricePerStops = price.price_per_stop
+                this.selectedAirport = price.airport_id
+                this.selectedGroup = price.group_id
 
             },
             addPrice(){
@@ -129,18 +155,71 @@
 
                 this.prices.push(
                     {
-                        "airport": this.selectedAirport,
-                        "group": this.selectedGroup,
-                        "sharedPrice": this.sharedPrice,
-                        "privatePrice": this.privatePrice,
-                        "uniquePrice": this.uniquePrice,
-                        "baseBordenPrice": this.baseBordenPrice,
-                        "extraPassengerFee": this.extraPassengerFee,
-                        "extraFamilyPrice": this.extraFamilyPrice,
-                        "parkingDayPrice": this.parkingDayPrice,
-                        "pricePerStops": this.pricePerStops
+                        "airport_id": this.selectedAirport,
+                        "group_id": this.selectedGroup,
+                        "shared_price": this.sharedPrice,
+                        "private_price": this.privatePrice,
+                        "unique_price": this.uniquePrice,
+                        "base_borden_price": this.baseBordenPrice,
+                        "extra_passenger_fee": this.extraPassengerFee,
+                        "extra_family_price": this.extraFamilyPrice,
+                        "parking_day_rice": this.parkingDayPrice,
+                        "price_per_stop": this.pricePerStops
                     }
                 )
+
+                this.modalCreate()
+
+            },
+            serviceTypeModalCreate(){
+
+                this.modalServiceTypeAction = "create"
+                this.modalServiceTypeTitle = "Create service type"
+                this.serviceTypeId = ""
+                this.serviceTypeName = ""
+                this.serviceTypeIsOnlyPrivate = "true"
+                this.serviceTypeDiscountPercentage = ""
+
+            },
+            addServiceType(){
+
+                this.modalErrorServiceTypeName = ""
+                this.modalErrorServiceTypeIsOnlyPrivate = ""
+                this.modalErrorServiceTypeDiscountPercentage = ""
+
+                if(this.serviceTypesHasError()){
+                    return 
+                }
+
+                this.serviceTypes.push({
+                    "name": this.serviceTypeName,
+                    "is_only_private": this.serviceTypeIsOnlyPrivate,
+                    "discount_percentage":this.serviceTypeDiscountPercentage ? this.serviceTypeDiscountPercentage : 0
+                })
+
+            },
+            modalServiceTypeEdit(serviceType, index){
+
+                this.modalServiceTypeAction = "edit"
+                this.serviceTypeId = index
+                this.serviceTypeName = serviceType.name
+                this.serviceTypeIsOnlyPrivate = serviceType.is_only_private
+                this.serviceTypeDiscountPercentage = serviceType.discount_percentage
+
+            },
+            updateServiceType(){
+
+                this.modalErrorServiceTypeName = ""
+                this.modalErrorServiceTypeIsOnlyPrivate = ""
+                this.modalErrorServiceTypeDiscountPercentage = ""
+
+                if(this.serviceTypesHasError()){
+                    return 
+                }
+
+                this.serviceTypes[this.serviceTypeId].name = this.serviceTypeName
+                this.serviceTypes[this.serviceTypeId].is_only_private = this.serviceTypeIsOnlyPrivate
+                this.serviceTypes[this.serviceTypeId].discount_percentage = this.serviceTypeDiscountPercentage ? this.serviceTypeDiscountPercentage : 0
 
             },
             updatePrice(){
@@ -203,6 +282,23 @@
                 return error
 
             },
+            serviceTypesHasError(){
+
+                let error = false
+
+                if(this.serviceTypeName == ""){
+                    this.modalErrorServiceTypeName = "Service type name is required"
+                    error = true
+                }
+
+                if(this.serviceTypeIsOnlyPrivate == ""){
+                    this.modalErrorServiceTypeIsOnlyPrivate = "This field is required"
+                    error = true
+                }
+
+                return error
+
+            },  
             clearModalErrors(){
                 this.modalErrorUniquePrice = ""
                 this.modalErrorPrivatePrice = ""
@@ -215,14 +311,116 @@
                 this.prices.splice(index, 1)
 
             },
+            removeServiceType(index){
+
+                this.serviceTypes.splice(index, 1)
+
+            },
             clearPrices(){
                 this.prices = []
             },
-            async createService(){
+            uploadMainImage(){
 
-                const response = await axios.post("{{ url('/api/admin/service') }}", {
-
+                if(this.picture){
                     
+                    this.loading = true
+                    this.imageProgress = 0;
+                    let formData = new FormData()
+                    formData.append("file", this.file)
+                    formData.append("upload_preset", this.cloudinaryPreset)
+
+                    var _this = this
+                    var fileName = this.fileName
+                    this.pictureStatus = "subiendo";
+
+                    var config = {
+                        headers: { "X-Requested-With": "XMLHttpRequest", "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")},
+                        onUploadProgress: function(progressEvent) {
+                            
+                            var progressPercent = Math.round((progressEvent.loaded * 100.0) / progressEvent.total);
+                        
+                            _this.imageProgress = progressPercent
+                            
+                        }
+                    }
+
+                    axios.post(
+                        "{{ url('/api/admin/upload-file') }}",
+                        formData,
+                        config                        
+                    ).then(res => {
+
+                        this.pictureStatus = "listo";
+                        this.finalPictureName = res.data.file_route
+                        this.loading = false
+
+                        this.store()
+
+                    }).catch(err => {
+
+                        this.loading = false
+                        swal({
+                            "text":err.response.data.message,
+                            "icon": "error"
+                        })
+
+                    })
+
+                }else{
+
+                    swal({
+                        text:"No hay imagen para subir",
+                        "icon": "error"
+                    })
+
+
+                }
+
+            },
+            async store(){
+
+                const response = await axios.post("{{ route('admin.service') }}",
+                    {
+                        "name":this.title,
+                        "is_shared_and_private":JSON.parse(this.isSharedAndPrivate),
+                        "has_groups":JSON.parse(this.hasGroups),
+                        "icon":this.finalPictureName,
+                        "depot_address":this.depotAddress,
+                        "description":this.description,
+                        "advice":this.advice,
+                        "second_advice":this.secondaryAdvice,
+                        "apply_sold_out":this.applySoldOut,
+                        "is_sold_out":false,
+                        "purchase_advice":this.purchaseAdvice,
+                        "info_rates":{
+                            "max_passenger":this.maxPassengers,
+                            "max_pets":this.maxPets,
+                            "max_bags":this.maxBags,
+                            "max_carry_on_bag":this.maxCarryOn,
+                            "max_stops":this.maxStops
+                        },
+                        "prices":this.prices,
+                        "service_types":this.serviceTypes
+                    },
+                    {
+                        headers:{
+                            "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                        }
+                    }
+                )
+
+                console.log("response", response)
+
+            },
+            async fetchAirports(){
+                axios.get("{{ url('/api/admin/airport') }}", {
+                    headers:{
+                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
+                .then(res => {
+
+                    this.airports = res.data.airport
 
                 })
 
@@ -233,7 +431,7 @@
         },
         mounted(){
 
-          
+            this.fetchAirports()
 
         }
 

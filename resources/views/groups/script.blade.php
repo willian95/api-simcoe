@@ -28,13 +28,17 @@
             store(){
 
                 this.loading = true
-                axios.post("{{ url('/api/admin/group') }}", {name: this.name})
+                axios.post("{{ url('/api/admin/group') }}", {name: this.name}, {
+                    headers:{
+                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
                 .then(res => {
                     this.loading = false
                     if(res.data.success == true){
 
                         swal({
-                            text: res.data.msg,
+                            text: res.data.message,
                             icon: "success"
                         });
                         this.name = ""
@@ -45,7 +49,7 @@
                     }else{
 
                         swal({
-                            text: res.data.msg,
+                            text: res.data.message,
                             icon: "error"
                         });
 
@@ -61,13 +65,17 @@
             update(){
 
                 this.loading = true
-                axios.put("{{ url('/admin/group') }}"+"/"+this.groupId, {name: this.name,})
+                axios.put("{{ url('/admin/group') }}"+"/"+this.groupId, {name: this.name},{
+                    headers:{
+                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
                 .then(res => {
                     this.loading = false
                     if(res.data.success == true){
 
                         swal({
-                            text: res.data.msg,
+                            text: res.data.message,
                             icon: "success"
                         });
                         this.name = ""
@@ -80,7 +88,7 @@
                     }else{
 
                         swal({
-                            text: res.data.msg,
+                            text: res.data.message,
                             icon: "error"
                         });
 
@@ -102,7 +110,11 @@
             },
             fetch(){
 
-                axios.get("{{ url('/api/admin/group') }}")
+                axios.get("{{ url('/api/admin/group') }}", {
+                    headers:{
+                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
                 .then(res => {
 
                     this.groups = res.data
@@ -122,18 +134,18 @@
                 .then((willDelete) => {
                     if (willDelete) {
                         this.loading = true
-                        axios.delete("{{ url('/api/admin/group') }}", {id: id}).then(res => {
+                        axios.delete("{{ url('/api/admin/group') }}"+"/"+id).then(res => {
                             this.loading = false
                             if(res.data.success == true){
                                 swal({
-                                    text: res.data.msg,
+                                    text: res.data.message,
                                     icon: "success"
                                 });
                                 this.fetch()
                             }else{
 
                                 swal({
-                                    text: res.data.msg,
+                                    text: res.data.message,
                                     icon: "error"
                                 });
 
