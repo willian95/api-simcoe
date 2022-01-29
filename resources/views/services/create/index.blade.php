@@ -250,7 +250,7 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="description">* Advice (optional)</label>
+                                <label for="description">Advice (optional)</label>
                                 <textarea rows="3" id="editorAdvice" v-model="advice"></textarea>
                                 <small v-if="errors.hasOwnProperty('advice')">@{{ errors['advice'][0] }}</small>
                             </div>
@@ -258,7 +258,7 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="description">* Secondary advice (optional)</label>
+                                <label for="description">Secondary advice (optional)</label>
                                 <textarea rows="3" id="editorSecondaryAdvice" v-model="secondaryAdvice"></textarea>
                                 <small v-if="errors.hasOwnProperty('secondary_advice')">@{{ errors['secondary_advice'][0] }}</small>
                             </div>
@@ -266,7 +266,7 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="description">* Purchase advice (optional)</label>
+                                <label for="description">Purchase advice (optional)</label>
                                 <textarea rows="3" id="editorPurchaseAdvice" v-model="purchaseAdvice"></textarea>
                                 <small v-if="errors.hasOwnProperty('purchase_advice')">@{{ errors['purchase_advice'][0] }}</small>
                             </div>
@@ -299,7 +299,9 @@
 @endsection
 
 @push("scripts")
-
+    <script src="{{ url('ckeditor/build/ckeditor.js') }}"></script>
     @include("services.create.script")
+
+    
 
 @endpush

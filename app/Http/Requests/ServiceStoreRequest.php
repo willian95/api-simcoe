@@ -34,7 +34,7 @@ class ServiceStoreRequest extends FormRequest
             //ServiceInfoRate
            'info_rates.max_pets'=>'required|integer',
            'info_rates.max_bags'=>'required|integer',
-           'info_rates.max_passager'=>'required|integer',
+           'info_rates.max_passenger'=>'required|integer',
            'info_rates.max_carry_on_bag'=>'required|integer',
            'info_rates.max_stops'=>'required|integer',
             //ServiceType

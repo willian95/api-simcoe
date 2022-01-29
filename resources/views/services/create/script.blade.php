@@ -68,7 +68,12 @@
                 
                 modalErrorServiceTypeName:"",
                 modalErrorServiceTypeIsOnlyPrivate:"",
-                modalErrorServiceTypeDiscountPercentage:""
+                modalErrorServiceTypeDiscountPercentage:"",
+
+                editorDescriptionField: null,
+                editorAdviceField: null,
+                editorSecondaryAdviceField: null,
+                editorPurchaseAdviceField: null
 
 
             }
@@ -203,7 +208,7 @@
                 this.modalServiceTypeAction = "edit"
                 this.serviceTypeId = index
                 this.serviceTypeName = serviceType.name
-                this.serviceTypeIsOnlyPrivate = serviceType.is_only_private
+                this.serviceTypeIsOnlyPrivate = serviceType.is_only_private.toString()
                 this.serviceTypeDiscountPercentage = serviceType.discount_percentage
 
             },
@@ -218,7 +223,7 @@
                 }
 
                 this.serviceTypes[this.serviceTypeId].name = this.serviceTypeName
-                this.serviceTypes[this.serviceTypeId].is_only_private = this.serviceTypeIsOnlyPrivate
+                this.serviceTypes[this.serviceTypeId].is_only_private = JSON.parse(this.serviceTypeIsOnlyPrivate)
                 this.serviceTypes[this.serviceTypeId].discount_percentage = this.serviceTypeDiscountPercentage ? this.serviceTypeDiscountPercentage : 0
 
             },
@@ -386,12 +391,12 @@
                         "has_groups":JSON.parse(this.hasGroups),
                         "icon":this.finalPictureName,
                         "depot_address":this.depotAddress,
-                        "description":this.description,
-                        "advice":this.advice,
-                        "second_advice":this.secondaryAdvice,
+                        "description":this.editorDescriptionField.getData(),
+                        "advice":this.editorAdviceField.getData(),
+                        "second_advice":this.editorSecondaryAdviceField.getData(),
                         "apply_sold_out":this.applySoldOut,
                         "is_sold_out":false,
-                        "purchase_advice":this.purchaseAdvice,
+                        "purchase_advice":this.editorPurchaseAdviceField.getData(),
                         "info_rates":{
                             "max_passenger":this.maxPassengers,
                             "max_pets":this.maxPets,
@@ -424,16 +429,38 @@
 
                 })
 
+            },
+            async createEditor(idTag){
+
+                const editor = await ClassicEditor.create( document.querySelector( '#'+idTag ) )
+                if(idTag == "editorDescription"){
+                    this.editorDescriptionField = editor
+                }
+
+                if(idTag == "editorAdvice"){
+                    this.editorAdviceField = editor
+                }
+
+                if(idTag == "editorSecondaryAdvice"){
+                    this.editorSecondaryAdviceField = editor
+                }
+
+                if(idTag == "editorPurchaseAdvice"){
+                    this.editorPurchaseAdviceField = editor
+                
+                }
+
             }
-
-
-
         },
         mounted(){
 
             this.fetchAirports()
+            this.createEditor("editorDescription")
+            this.createEditor("editorAdvice")
+            this.createEditor("editorSecondaryAdvice")
+            this.createEditor("editorPurchaseAdvice")  
 
-        }
+        },
 
     })
 
