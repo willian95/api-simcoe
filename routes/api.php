@@ -6,6 +6,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\File\FileController;
 use App\Http\Controllers\Airport\AirportController;
 use App\Http\Controllers\Service\ServiceController;
+use App\Http\Controllers\Vehicle\VehicleController;
 
 
 /*
@@ -26,6 +27,13 @@ Route::group(["prefix" => "admin"], function(){
     Route::post('/register', [UserController::class, 'register'])->name("admin.register");
 
     Route::post('/login', [UserController::class, 'authenticate'])->name("admin.login");
+
+
+
+
+
+
+
 
     Route::group(['middleware' => ['VerifyToken']], function() {
     
@@ -55,6 +63,17 @@ Route::group(["prefix" => "admin"], function(){
     
         route::post('/service/restore', [ServiceController::class, 'restore'])->name("admin.service.restore");
 
+        //Vehicle
+
+        route::post('/vehicle', [VehicleController::class, 'store'])->name("admin.vehicle");
+
+        route::get('/vehicle', [VehicleController::class, 'list'])->name("admin.vehicle.list");
+            
+        route::put('/vehicle/{vehicle_id}', [VehicleController::class, 'update'])->name("admin.vehicle.update");
+        
+        route::delete('/vehicle/{vehicle_id}', [VehicleController::class, 'destroy'])->name("admin.vehicle.delete");
+            
+        route::post('/vehicle/restore', [VehicleController::class, 'restore'])->name("admin.vehicle.restore");
 
     });
 
