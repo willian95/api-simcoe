@@ -19,3 +19,9 @@ yarn-error.log
 /public/uploads/*.avi
 /public/uploads/*.mkv
 /public/uploads/*.mp4
+/public/picture/*.jpg
+/public/picture/*.jpeg
+/public/picture/*.png
+/public/picture/*.avi
+/public/picture/*.mkv
+/public/picture/*.mp4

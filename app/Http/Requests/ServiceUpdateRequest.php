@@ -51,7 +51,7 @@ class ServiceUpdateRequest extends FormRequest
 
         return [
             //Service
-            'id.required'=>'A record must be selected to restore!',
+            'id.required'=>'A record must be selected!',
             'id.integer'=>'Invalid registration!',
             'name.required'=>'name is required',
             'name.string'=>'invalid format',
