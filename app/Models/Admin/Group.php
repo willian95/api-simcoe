@@ -19,4 +19,13 @@ class Group extends Model
         'name',
     ];
 
+    public function Service()
+    {
+
+        return $this->belongsTo('App\Models\Admin\Service','id','service_id');
+        
+
+    } 
+
+
 }
