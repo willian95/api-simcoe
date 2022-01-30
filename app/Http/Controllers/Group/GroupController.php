@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Airport;
+namespace App\Http\Controllers\Group;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\AirportStoreRequest;
-use App\Http\Requests\AirportUpdateRequest;
-use App\Http\Requests\AirportDestroyRequest;
-use App\Http\Requests\AirportRestoreRequest;
-use App\Models\Admin\Airport;
+use App\Http\Requests\GroupStoreRequest;
+use App\Http\Requests\GroupUpdateRequest;
+use App\Http\Requests\GroupDestroyRequest;
+use App\Http\Requests\GroupRestoreRequest;
+use App\Models\Admin\Group;
+use App\Models\Admin\Price;
 use Illuminate\Support\Facades\Validator;
 use Log;
 use DB;
 
-class AirportController extends Controller
+class GroupController extends Controller
 {
 
     /**
@@ -22,19 +23,30 @@ class AirportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AirportStoreRequest $request)
+    public function store(GroupStoreRequest $request)
     {
         try{
 
             DB::beginTransaction();
     
-            $airport = Airport::create([
+            $group = Group::create([
+                'service_id' => $request->get('service_id'),
                 'name' => $request->get('name'),
             ]);
 
+            foreach ($request->prices as $price) {
+
+                $price=Price::create([
+                    'airport_id'=>$price['airport_id'],
+                    'shared_price'=>$price['shared_price'],	
+                    'private_price'=>$price['private_price'],
+                ]);
+
+            }
+
             DB::commit();
 
-            return response()->json(["success" => true,"message" => "Registered successfully", "airport"=>$airport], 201);
+            return response()->json(["success" => true,"message" => "Registered successfully"], 201);
 
         }catch(\Exception $e){
 
@@ -56,9 +68,9 @@ class AirportController extends Controller
     {
         try{
 
-            $airport = Airport::all();
+            $group = Group::with(['Service'])->get();
               
-            return response()->json(["success" => true,"message" => "Data obtained successfully", "airport"=>$airport]);
+            return response()->json(["success" => true,"message" => "Data obtained successfully", "group"=>$group]);
 
         }catch(\Exception $e){
 
@@ -76,30 +88,38 @@ class AirportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AirportUpdateRequest $request, $id)
+    public function update(GroupUpdateRequest $request, $id)
     {
         try{
 
             DB::beginTransaction();
     
-            $airport=Airport::where("id",$id)->first();
+            $group=Group::where("id",$id)->first();
 
-            if($airport==null)
+            if($group==null)
 
                 return response()->json(["success" => false, "message" => "Record not found!"], 200);
             
-            $repeated=Airport::where("id","<>",$airport->id)->where("name",$request->name)->first();    
+            $group->fill([                
+                            'service_id' => $request->get('service_id'),
+                            'name' => $request->get('name'),
+                        ])->save();
+
+            foreach ($request->prices as $price) {
+
+                $price=Price::where("id",$price['id'])->first();
             
-            if($repeated!=null)
-
-                return response()->json(["success" => false, "message" => "There is already a record created with that name!"], 200);
-
-
-            $airport->fill(['name'=>$request->name])->save();
+                $price->fill([
+                                'airport_id'=>$price['airport_id'],
+                                'shared_price'=>$price['shared_price'],	
+                                'private_price'=>$price['private_price'],
+                            ])->save();
+            
+            }
 
             DB::commit();
 
-            return response()->json(["success" => true,"message" => "Successful update", "airport"=>$airport], 201);
+            return response()->json(["success" => true,"message" => "Successful update"], 201);
 
         }catch(\Exception $e){
 
@@ -124,13 +144,13 @@ class AirportController extends Controller
 
             DB::beginTransaction();
     
-            $airport=Airport::where("id",$id)->first();
+            $group=Group::where("id",$id)->first();
 
-            if($airport==null)
+            if($group==null)
 
                 return response()->json(["success" => false, "message" => "Record not found!"], 200);
  
-            $airport->delete();
+            $group->delete();
 
             DB::commit();
 
@@ -153,17 +173,17 @@ class AirportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function restore(AirportRestoreRequest $request)
+    public function restore(GroupRestoreRequest $request)
     {
         try{
 
             DB::beginTransaction();
     
-            $airport=Airport::withTrashed()->find($request->id)->restore();
+            $group=group::withTrashed()->find($request->id)->restore();
 
             DB::commit();
 
-            return response()->json(["success" => true,"message" => "Registry successfully restored!", "airport"=>$airport], 201);
+            return response()->json(["success" => true,"message" => "Registry successfully restored!"], 201);
 
         }catch(\Exception $e){
 

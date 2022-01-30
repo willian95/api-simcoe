@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Airport;
+namespace App\Http\Controllers\Town;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\AirportStoreRequest;
-use App\Http\Requests\AirportUpdateRequest;
-use App\Http\Requests\AirportDestroyRequest;
-use App\Http\Requests\AirportRestoreRequest;
-use App\Models\Admin\Airport;
+use App\Http\Requests\TownStoreRequest;
+use App\Http\Requests\TownUpdateRequest;
+use App\Http\Requests\TownDestroyRequest;
+use App\Http\Requests\TownRestoreRequest;
+use App\Models\Admin\Town;
 use Illuminate\Support\Facades\Validator;
 use Log;
 use DB;
 
-class AirportController extends Controller
+
+class TownController extends Controller
 {
 
     /**
@@ -22,19 +23,20 @@ class AirportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AirportStoreRequest $request)
+    public function store(TownStoreRequest $request)
     {
         try{
 
             DB::beginTransaction();
     
-            $airport = Airport::create([
+            $town = Town::create([
+                'group_id' => $request->get('group_id'),
                 'name' => $request->get('name'),
             ]);
 
             DB::commit();
 
-            return response()->json(["success" => true,"message" => "Registered successfully", "airport"=>$airport], 201);
+            return response()->json(["success" => true,"message" => "Registered successfully", "town"=>$town], 201);
 
         }catch(\Exception $e){
 
@@ -56,9 +58,9 @@ class AirportController extends Controller
     {
         try{
 
-            $airport = Airport::all();
+            $town = Town::with(['Group'])->get();
               
-            return response()->json(["success" => true,"message" => "Data obtained successfully", "airport"=>$airport]);
+            return response()->json(["success" => true,"message" => "Data obtained successfully", "town"=>$town]);
 
         }catch(\Exception $e){
 
@@ -76,30 +78,26 @@ class AirportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AirportUpdateRequest $request, $id)
+    public function update(TownUpdateRequest $request, $id)
     {
         try{
 
             DB::beginTransaction();
     
-            $airport=Airport::where("id",$id)->first();
+            $town=Town::where("id",$id)->first();
 
-            if($airport==null)
+            if($town==null)
 
                 return response()->json(["success" => false, "message" => "Record not found!"], 200);
-            
-            $repeated=Airport::where("id","<>",$airport->id)->where("name",$request->name)->first();    
-            
-            if($repeated!=null)
-
-                return response()->json(["success" => false, "message" => "There is already a record created with that name!"], 200);
-
-
-            $airport->fill(['name'=>$request->name])->save();
+        
+            $town->fill([
+                'group_id' => $request->group_id,
+                'name'=>$request->name,
+            ])->save();
 
             DB::commit();
 
-            return response()->json(["success" => true,"message" => "Successful update", "airport"=>$airport], 201);
+            return response()->json(["success" => true,"message" => "Successful update"], 201);
 
         }catch(\Exception $e){
 
@@ -124,13 +122,13 @@ class AirportController extends Controller
 
             DB::beginTransaction();
     
-            $airport=Airport::where("id",$id)->first();
+            $town=Town::where("id",$id)->first();
 
-            if($airport==null)
+            if($town==null)
 
                 return response()->json(["success" => false, "message" => "Record not found!"], 200);
  
-            $airport->delete();
+            $town->delete();
 
             DB::commit();
 
@@ -153,17 +151,17 @@ class AirportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function restore(AirportRestoreRequest $request)
+    public function restore(TownRestoreRequest $request)
     {
         try{
 
             DB::beginTransaction();
     
-            $airport=Airport::withTrashed()->find($request->id)->restore();
+            $town=Town::withTrashed()->find($request->id)->restore();
 
             DB::commit();
 
-            return response()->json(["success" => true,"message" => "Registry successfully restored!", "airport"=>$airport], 201);
+            return response()->json(["success" => true,"message" => "Registry successfully restored!"], 201);
 
         }catch(\Exception $e){
 
