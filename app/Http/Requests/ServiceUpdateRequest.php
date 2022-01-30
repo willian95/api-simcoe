@@ -26,11 +26,10 @@ class ServiceUpdateRequest extends FormRequest
 
         return [
             //Service
-           'id'=>'required|integer',
            'name'=>'required|string',
            'is_shared_and_private'=>'required|boolean',
            'has_groups'=>'required|boolean',
-           'icon'=>'required|string',
+           'icon'=>'nullable|string',
            'description'=>'required|string',
             //ServiceInfoRate
            'info_rates.id'=>'required|integer',
@@ -58,8 +57,7 @@ class ServiceUpdateRequest extends FormRequest
             'is_shared_and_private.required'=>'is shared and private is required',
             'is_shared_and_private.boolean'=>'invalid format',
             //ServiceInfoRate
-            'info_rates.id.required'=>'A record must be selected to restore!',
-            'info_rates.id.integer'=>'Invalid registration!',
+
             'info_rates.max_pets.required'=>'max pets is required',
             'info_rates.max_pets.integer'=>'invalid format',
             'info_rates.max_bags.required'=>'max bags is required',

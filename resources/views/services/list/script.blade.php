@@ -19,11 +19,15 @@
 
             async fetch(link = "{{ url('/api/admin/service') }}"){
 
-                const response = await axios.get(link)
-                this.services = response.data.data
-                this.links = res.data.links
-                this.currentPage = res.data.current_page
-                this.totalPages = res.data.last_page
+                const response = await axios.get(link, {
+                    headers:{
+                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
+                this.services = response.data.service
+                this.links = response.data.links
+                this.currentPage = response.data.current_page
+                this.totalPages = response.data.last_page
 
             },
             erase(id){
@@ -38,7 +42,11 @@
                 .then((willDelete) => {
                     if (willDelete) {
                         this.loading = true
-                        axios.delete("{{ url('/api/admin/service') }}"+"/"+id).then(res => {
+                        axios.delete("{{ url('/api/admin/service') }}"+"/"+id, {
+                            headers:{
+                                "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                            }
+                        }).then(res => {
                             this.loading = false
                             if(res.data.success == true){
                                 swal({

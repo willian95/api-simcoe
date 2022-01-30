@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\UserController;
+use App\Models\Admin\Service;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +22,12 @@ Route::view("/airports", "airports.index")->name("airports.index");
 
 Route::view("/services", "services.list.index")->name("services.index");
 Route::view("/services/create", "services.create.index")->name("services.create");
+Route::get("/services/edit/{id}", function($id){
+
+    $service = Service::with(['ServiceInfoRate','ServiceTypes','Prices.Group'])->where("id", $id)->first();
+    return view("services.edit.index", ["service" => $service]);
+
+});
 
 Route::view("/groups", "groups.index")->name("groups.index");
 

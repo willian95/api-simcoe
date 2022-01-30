@@ -31,31 +31,23 @@ class Service extends Model
     public function ServiceInfoRate()
     {
 
-        return $this->belongsTo('App\Models\Admin\ServiceInfoRate','id','service_id');
+        return $this->hasOne('App\Models\Admin\ServiceInfoRate');
 
 
     } 
 
-    public function ServiceType()
+    public function ServiceTypes()
     {
 
-        return $this->belongsTo('App\Models\Admin\ServiceType','id','service_id');
+        return $this->hasMany('App\Models\Admin\ServiceType');
         
 
     } 
 
-    public function Group()
+    public function Prices()
     {
 
-        return $this->belongsTo('App\Models\Admin\Group','id','service_id');
-        
-
-    } 
-
-    public function Price()
-    {
-
-        return $this->belongsTo('App\Models\Admin\Price','id','service_id');
+        return $this->hasMany('App\Models\Admin\Price');
         
 
     } 

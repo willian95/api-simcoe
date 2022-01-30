@@ -176,14 +176,14 @@ License: You must have a valid license purchased only from themeforest(the above
 													<span class="menu-text">Actions</span>
 												</span>
 											</li>
-											{{--<li class="menu-item" aria-haspopup="true">
+											<li class="menu-item" aria-haspopup="true">
 												<a href="{{ route('services.create') }}" class="menu-link">
 													<i class="menu-bullet menu-bullet-line">
 														<span></span>
 													</i>
-													<span class="menu-text">Crear</span>
+													<span class="menu-text">Create</span>
 												</a>
-											</li>--}}
+											</li>
 											<li class="menu-item" aria-haspopup="true">
 												<a href="{{ route('services.index') }}" class="menu-link">
 													<i class="menu-bullet menu-bullet-line">

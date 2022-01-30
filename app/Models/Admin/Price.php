@@ -22,16 +22,24 @@ class Price extends Model
         'private_price',
         'unique_price',
         'base_borden_price',
-        'extra_passnger_fee',
+        'extra_passenger_fee',
         'extra_family_price',	
         'parking_day_price',
         'price_per_stop', 
     ];
 
+    public function Service()
+    {
+
+        return $this->belongsTo('App\Models\Admin\Service');
+        
+
+    } 
+
     public function Group()
     {
 
-        return $this->belongsTo('App\Models\Admin\Group','id','group_id');
+        return $this->belongsTo('App\Models\Admin\Group');
         
 
     } 

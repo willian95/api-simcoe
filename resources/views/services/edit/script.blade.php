@@ -7,33 +7,31 @@
 
                 loading:false,
                 errors:[],
-                airports:[
-                    {id: 1, name:"Pearson Airport"},
-                    {id: 2, name:"Billy Bishop Airport"},
-                ],
+                airports:[],
                 groups:[
                     {id:1, name: "Group A"},
                     {id:2, name: "Group B"},
                     {id:3, name: "Group C"}
                 ],
-                prices:[],
-                serviceTypes:[],
+                prices:JSON.parse('{!! $service->Prices !!}'),
+                serviceTypes:JSON.parse('{!! $service->ServiceTypes !!}'),
 
-                title:"",
-                applySoldOut:"false",
-                depotAddress:"",
-                maxPets:"",
-                maxBags:"",
-                maxCarryOn:"",
-                maxPassengers:"",
+                serviceId:"{{ $service->id }}",
+                title:"{{ $service->name }}",
+                applySoldOut:"{{ $service->apply_sold_out == 0 ? 'false' : 'true' }}",
+                depotAddress:"{{ $service->depot_address }}",
+                maxPets:"{{ $service->ServiceInfoRate->max_pets }}",
+                maxBags:"{{ $service->ServiceInfoRate->max_bags }}",
+                maxCarryOn:"{{ $service->ServiceInfoRate->max_carry_on_bag }}",
+                maxPassengers:"{{ $service->ServiceInfoRate->max_passager }}",
                 pictureStatus:"",
                 imageProgress:"",
-                imagePreview:"",
+                imagePreview:"{{ $service->icon }}",
                 file:"",
                 finalPictureName:"",
-                hasGroups:'false',
-                isSharedAndPrivate:'false',
-                maxStops:0,
+                hasGroups:"{{ $service->has_groups == 0 ? 'false' : 'true' }}",
+                isSharedAndPrivate:"{{ $service->is_shared_and_private == 0 ? 'false' : 'true' }}",
+                maxStops:"{{ $service->ServiceInfoRate->max_stops }}",
                 description:"",
                 advice:"",
                 secondaryAdvice:"",
@@ -70,10 +68,10 @@
                 modalErrorServiceTypeIsOnlyPrivate:"",
                 modalErrorServiceTypeDiscountPercentage:"",
 
-                editorDescriptionField: null,
-                editorAdviceField: null,
-                editorSecondaryAdviceField: null,
-                editorPurchaseAdviceField: null
+                editorDescriptionField:null,
+                editorAdviceField:null,
+                editorSecondaryAdviceField:null,
+                editorPurchaseAdviceField:null
 
 
             }
@@ -208,7 +206,7 @@
                 this.modalServiceTypeAction = "edit"
                 this.serviceTypeId = index
                 this.serviceTypeName = serviceType.name
-                this.serviceTypeIsOnlyPrivate = serviceType.is_only_private.toString()
+                this.serviceTypeIsOnlyPrivate = serviceType.is_only_private == 0 ? 'false' : 'true'
                 this.serviceTypeDiscountPercentage = serviceType.discount_percentage
 
             },
@@ -359,7 +357,7 @@
                         this.finalPictureName = res.data.file_route
                         this.loading = false
 
-                        this.store()
+                        this.update()
 
                     }).catch(err => {
 
@@ -373,18 +371,15 @@
 
                 }else{
 
-                    swal({
-                        text:"No hay imagen para subir",
-                        "icon": "error"
-                    })
-
+                    
+                    this.update()
 
                 }
 
             },
-            async store(){
+            async update(){
 
-                const response = await axios.post("{{ route('admin.service') }}",
+                const response = await axios.put("{{ url('api/admin/service') }}"+"/"+this.serviceId,
                     {
                         "name":this.title,
                         "is_shared_and_private":JSON.parse(this.isSharedAndPrivate),
@@ -449,18 +444,22 @@
                 const editor = await ClassicEditor.create( document.querySelector( '#'+idTag ) )
                 if(idTag == "editorDescription"){
                     this.editorDescriptionField = editor
+                    this.editorDescriptionField.setData('{!! $service->description !!}')
                 }
 
                 if(idTag == "editorAdvice"){
                     this.editorAdviceField = editor
+                    this.editorAdviceField.setData('{!! $service->advice !!}')
                 }
 
                 if(idTag == "editorSecondaryAdvice"){
                     this.editorSecondaryAdviceField = editor
+                    this.editorSecondaryAdviceField.setData('{!! $service->secondary_advice !!}')
                 }
 
                 if(idTag == "editorPurchaseAdvice"){
                     this.editorPurchaseAdviceField = editor
+                    this.editorPurchaseAdviceField.setData('{!! $service->purchase_advice !!}')
                 
                 }
 
@@ -472,7 +471,7 @@
             this.createEditor("editorDescription")
             this.createEditor("editorAdvice")
             this.createEditor("editorSecondaryAdvice")
-            this.createEditor("editorPurchaseAdvice")  
+            this.createEditor("editorPurchaseAdvice")
 
         },
 

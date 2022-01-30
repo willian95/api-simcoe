@@ -19,4 +19,12 @@ class Group extends Model
         'name',
     ];
 
+    public function Prices()
+    {
+
+        return $this->hasMany('App\Models\Admin\Price');
+        
+
+    } 
+
 }

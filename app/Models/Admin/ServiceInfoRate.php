@@ -22,6 +22,15 @@ class ServiceInfoRate extends Model
         'max_carry_on_bag',
         'max_stops',
     ];
+
+    public function Service()
+    {
+
+        return $this->belongsTo('App\Models\Admin\Service');
+        
+
+    } 
+
 }
 
 

@@ -20,4 +20,13 @@ class ServiceType extends Model
         'is_only_private',
         'discount_percentage',
     ];
+
+    public function Service()
+    {
+
+        return $this->belongsTo('App\Models\Admin\Service');
+        
+
+    } 
+
 }

@@ -49,7 +49,7 @@ class ServiceController extends Controller
                 'service_id'=> $service->id,
                 'max_pets'=> $request->info_rates['max_pets'],
                 'max_bags'=> $request->info_rates['max_bags'],
-                'max_passager'=> $request->info_rates['max_passager'],
+                'max_passager'=> $request->info_rates['max_passenger'],
                 'max_carry_on_bag'=> $request->info_rates['max_carry_on_bag'],
                 'max_stops'=>$request->info_rates['max_stops'],
             ]);
@@ -71,12 +71,12 @@ class ServiceController extends Controller
 
                     'airport_id'=>$price['airport_id'],
                     'service_id'=> $service->id,
-                    'group_id'=>$price['group_id'],
+                    'group_id'=>$price['group_id'] ?? 1, //Eliminar luego
                     'shared_price'=>$price['shared_price'],	
                     'private_price'=>$price['private_price'],
                     'unique_price'=>$price['unique_price'],
                     'base_borden_price'=>$price['base_borden_price'],
-                    'extra_passnger_fee'=>$price['extra_passnger_fee'],
+                    'extra_passenger_fee'=>$price['extra_passenger_fee'],
                     'extra_family_price'=>$price['extra_family_price'],	
                     'parking_day_price'=>$price['parking_day_price'],
                     'price_per_stop'=>$price['price_per_stop'], 
@@ -109,7 +109,7 @@ class ServiceController extends Controller
     {
         try{
 
-            $service = Service::with(['ServiceInfoRate','ServiceType','Group','Price'])->get();
+            $service = Service::with(['ServiceInfoRate','ServiceTypes','Prices.Group'])->get();
               
             return response()->json(["success" => true,"message" => "Data obtained successfully", "service"=>$service]);
 
@@ -164,7 +164,7 @@ class ServiceController extends Controller
             $serviceInfoRate->fill([
                 'max_pets'=> $request->info_rates['max_pets'],
                 'max_bags'=> $request->info_rates['max_bags'],
-                'max_passager'=> $request->info_rates['max_passager'],
+                'max_passager'=> $request->info_rates['max_passenger'],
                 'max_carry_on_bag'=> $request->info_rates['max_carry_on_bag'],
                 'max_stops'=>$request->info_rates['max_stops'],
             ])->save();
@@ -194,7 +194,7 @@ class ServiceController extends Controller
                     'private_price'=>$price['private_price'],
                     'unique_price'=>$price['unique_price'],
                     'base_borden_price'=>$price['base_borden_price'],
-                    'extra_passnger_fee'=>$price['extra_passnger_fee'],
+                    'extra_passenger_fee'=>$price['extra_passenger_fee'],
                     'extra_family_price'=>$price['extra_family_price'],	
                     'parking_day_price'=>$price['parking_day_price'],
                     'price_per_stop'=>$price['price_per_stop'], 
