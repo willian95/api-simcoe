@@ -24,6 +24,13 @@ class Group extends Model
 
         return $this->hasMany('App\Models\Admin\Price');
         
+    } 
+
+    public function Price()
+    {
+
+        return $this->belongsTo('App\Models\Admin\Price','id','group_id');
+        
 
     } 
 
