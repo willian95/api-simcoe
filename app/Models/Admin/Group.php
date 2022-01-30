@@ -24,6 +24,13 @@ class Group extends Model
 
         return $this->belongsTo('App\Models\Admin\Service','id','service_id');
         
+    } 
+
+    public function Price()
+    {
+
+        return $this->belongsTo('App\Models\Admin\Price','id','group_id');
+        
 
     } 
 

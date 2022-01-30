@@ -37,6 +37,7 @@ class GroupController extends Controller
             foreach ($request->prices as $price) {
 
                 $price=Price::create([
+                    'group_id'=>$group->id,
                     'airport_id'=>$price['airport_id'],
                     'shared_price'=>$price['shared_price'],	
                     'private_price'=>$price['private_price'],
@@ -68,7 +69,7 @@ class GroupController extends Controller
     {
         try{
 
-            $group = Group::with(['Service'])->get();
+            $group = Group::with(['Service','Price'])->get();
               
             return response()->json(["success" => true,"message" => "Data obtained successfully", "group"=>$group]);
 
@@ -149,6 +150,8 @@ class GroupController extends Controller
             if($group==null)
 
                 return response()->json(["success" => false, "message" => "Record not found!"], 200);
+
+            $price=Price::where('group_id',$id)->delete();  
  
             $group->delete();
 
@@ -178,8 +181,10 @@ class GroupController extends Controller
         try{
 
             DB::beginTransaction();
-    
+
             $group=group::withTrashed()->find($request->id)->restore();
+
+            $price=Price::withTrashed()->where('service_id',$request->id)->restore();
 
             DB::commit();
 
