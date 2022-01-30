@@ -7,6 +7,8 @@ use App\Http\Controllers\Airport\AirportController;
 use App\Http\Controllers\Service\ServiceController;
 use App\Http\Controllers\File\FileController;
 use App\Http\Controllers\Vehicle\VehicleController;
+use App\Http\Controllers\Group\GroupController;
+
 
 
 /*
@@ -29,13 +31,9 @@ Route::group(["prefix" => "admin"], function(){
     Route::post('/login', [UserController::class, 'authenticate'])->name("admin.login");
 
 
-
-
-
-
-
-
     Route::group(['middleware' => ['VerifyToken']], function() {
+        
+        //Uploads
     
         route::post('/upload-file', [FileController::class, 'upload'])->name("admin.upload-file");
 
@@ -74,6 +72,18 @@ Route::group(["prefix" => "admin"], function(){
         route::delete('/vehicle/{vehicle_id}', [VehicleController::class, 'destroy'])->name("admin.vehicle.delete");
             
         route::post('/vehicle/restore', [VehicleController::class, 'restore'])->name("admin.vehicle.restore");
+
+        //Group
+
+        route::post('/group', [GroupController::class, 'store'])->name("admin.group");
+
+        route::get('/group', [GroupController::class, 'list'])->name("admin.group.list");
+            
+        route::put('/group/{group_id}', [GroupController::class, 'update'])->name("admin.group.update");
+        
+        route::delete('/group/{group_id}', [GroupController::class, 'destroy'])->name("admin.group.delete");
+            
+        route::post('/group/restore', [GroupController::class, 'restore'])->name("admin.group.restore");
 
     });
 
