@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Group;
+namespace App\Http\Controllers\Town;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\GroupStoreRequest;
-use App\Http\Requests\GroupUpdateRequest;
-use App\Http\Requests\GroupDestroyRequest;
-use App\Http\Requests\GroupRestoreRequest;
-use App\Models\Admin\Group;
-use App\Models\Admin\Price;
+use App\Http\Requests\TownStoreRequest;
+use App\Http\Requests\TownUpdateRequest;
+use App\Http\Requests\TownDestroyRequest;
+use App\Http\Requests\TownRestoreRequest;
+use App\Models\Admin\Town;
 use Illuminate\Support\Facades\Validator;
 use Log;
 use DB;
 
-class GroupController extends Controller
+
+class TownController extends Controller
 {
 
     /**
@@ -23,30 +23,20 @@ class GroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(GroupStoreRequest $request)
+    public function store(TownStoreRequest $request)
     {
         try{
 
             DB::beginTransaction();
     
-            $group = Group::create([
-                'service_id' => $request->get('service_id'),
+            $town = Town::create([
+                'group_id' => $request->get('group_id'),
                 'name' => $request->get('name'),
             ]);
 
-            foreach ($request->prices as $price) {
-
-                $price=Price::create([
-                    'airport_id'=>$price['airport_id'],
-                    'shared_price'=>$price['shared_price'],	
-                    'private_price'=>$price['private_price'],
-                ]);
-
-            }
-
             DB::commit();
 
-            return response()->json(["success" => true,"message" => "Registered successfully"], 201);
+            return response()->json(["success" => true,"message" => "Registered successfully", "town"=>$town], 201);
 
         }catch(\Exception $e){
 
@@ -68,9 +58,9 @@ class GroupController extends Controller
     {
         try{
 
-            $group = Group::with(['Service'])->get();
+            $town = Town::with(['Group'])->get();
               
-            return response()->json(["success" => true,"message" => "Data obtained successfully", "group"=>$group]);
+            return response()->json(["success" => true,"message" => "Data obtained successfully", "town"=>$town]);
 
         }catch(\Exception $e){
 
@@ -88,34 +78,22 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(GroupUpdateRequest $request, $id)
+    public function update(TownUpdateRequest $request, $id)
     {
         try{
 
             DB::beginTransaction();
     
-            $group=Group::where("id",$id)->first();
+            $town=Town::where("id",$id)->first();
 
-            if($group==null)
+            if($town==null)
 
                 return response()->json(["success" => false, "message" => "Record not found!"], 200);
-            
-            $group->fill([                
-                            'service_id' => $request->get('service_id'),
-                            'name' => $request->get('name'),
-                        ])->save();
-
-            foreach ($request->prices as $price) {
-
-                $price=Price::where("id",$price['id'])->first();
-            
-                $price->fill([
-                                'airport_id'=>$price['airport_id'],
-                                'shared_price'=>$price['shared_price'],	
-                                'private_price'=>$price['private_price'],
-                            ])->save();
-            
-            }
+        
+            $town->fill([
+                'group_id' => $request->group_id,
+                'name'=>$request->name,
+            ])->save();
 
             DB::commit();
 
@@ -144,13 +122,13 @@ class GroupController extends Controller
 
             DB::beginTransaction();
     
-            $group=Group::where("id",$id)->first();
+            $town=Town::where("id",$id)->first();
 
-            if($group==null)
+            if($town==null)
 
                 return response()->json(["success" => false, "message" => "Record not found!"], 200);
  
-            $group->delete();
+            $town->delete();
 
             DB::commit();
 
@@ -173,13 +151,13 @@ class GroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function restore(GroupRestoreRequest $request)
+    public function restore(TownRestoreRequest $request)
     {
         try{
 
             DB::beginTransaction();
     
-            $group=group::withTrashed()->find($request->id)->restore();
+            $town=Town::withTrashed()->find($request->id)->restore();
 
             DB::commit();
 

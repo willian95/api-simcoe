@@ -159,7 +159,7 @@ class AirportController extends Controller
 
             DB::beginTransaction();
     
-            $airport=airport::withTrashed()->find($request->id)->restore();
+            $airport=Airport::withTrashed()->find($request->id)->restore();
 
             DB::commit();
 

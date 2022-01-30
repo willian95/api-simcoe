@@ -8,6 +8,7 @@ use App\Http\Controllers\Service\ServiceController;
 use App\Http\Controllers\File\FileController;
 use App\Http\Controllers\Vehicle\VehicleController;
 use App\Http\Controllers\Group\GroupController;
+use App\Http\Controllers\Town\TownController;
 
 
 
@@ -84,6 +85,18 @@ Route::group(["prefix" => "admin"], function(){
         route::delete('/group/{group_id}', [GroupController::class, 'destroy'])->name("admin.group.delete");
             
         route::post('/group/restore', [GroupController::class, 'restore'])->name("admin.group.restore");
+
+        //Town
+
+        route::post('/town', [TownController::class, 'store'])->name("admin.town");
+
+        route::get('/town', [TownController::class, 'list'])->name("admin.town.list");
+            
+        route::put('/town/{town_id}', [TownController::class, 'update'])->name("admin.town.update");
+        
+        route::delete('/town/{town_id}', [TownController::class, 'destroy'])->name("admin.town.delete");
+            
+        route::post('/town/restore', [TownController::class, 'restore'])->name("admin.town.restore");
 
     });
 
