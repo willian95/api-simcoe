@@ -71,7 +71,7 @@ class ServiceController extends Controller
 
                     'airport_id'=>$price['airport_id'],
                     'service_id'=> $service->id,
-                    'group_id'=>$price['group_id'] ?? 1, //Eliminar luego
+                    'group_id'=>$price['group_id'],
                     'shared_price'=>$price['shared_price'],	
                     'private_price'=>$price['private_price'],
                     'unique_price'=>$price['unique_price'],
@@ -169,39 +169,102 @@ class ServiceController extends Controller
                 'max_stops'=>$request->info_rates['max_stops'],
             ])->save();
 
+            $NotdestroyServiceType=array();
+
             foreach ($request->service_types as $service_type) {
 
                 $serviceType=ServiceType::where("id",$service_type['id'])->first();
 
-                $serviceType->fill([
-                    'name'=> $service_type['name'],
-                    'is_only_private'=> $service_type['is_only_private'],
-                    'discount_percentage'=> $service_type['discount_percentage'],
-                ])->save();
+                if($serviceType==null){
+
+                    $serviceType=ServiceType::create([
+                        'service_id'=> $id,
+                        'name'=> $service_type['name'],
+                        'is_only_private'=> $service_type['is_only_private'],
+                        'discount_percentage'=> $service_type['discount_percentage'],
+                    ]);
+
+                    $NotdestroyServiceType[]=[$serviceType->id];
+
+                }else{
+
+                    $serviceType->fill([
+                        'name'=> $service_type['name'],
+                        'is_only_private'=> $service_type['is_only_private'],
+                        'discount_percentage'=> $service_type['discount_percentage'],
+                    ])->save();
+
+                    $NotdestroyServiceType[]=[$service_type['id']];
+
+                }
 
             }
+
+            if(count($NotdestroyServiceType)==0)
+
+                $serviceType=ServiceType::where('service_id',$id)->delete(); 
+
+            else
+
+                $serviceType=ServiceType::where('service_id',$id)->whereNotIn('id',$NotdestroyServiceType)->delete(); 
+
+            $NotdestroyPrice=array();
 
             foreach ($request->prices as $price) {
 
                 $price=Price::where("id",$price['id'])->first();
 
-                $price->fill([
+                if($price==null){
+ 
+                    $price=Price::create([
 
-                    'airport_id'=>$price['airport_id'],
-                    'service_id'=> $service->id,
-                    'group_id'=>$price['group_id'],
-                    'shared_price'=>$price['shared_price'],	
-                    'private_price'=>$price['private_price'],
-                    'unique_price'=>$price['unique_price'],
-                    'base_borden_price'=>$price['base_borden_price'],
-                    'extra_passenger_fee'=>$price['extra_passenger_fee'],
-                    'extra_family_price'=>$price['extra_family_price'],	
-                    'parking_day_price'=>$price['parking_day_price'],
-                    'price_per_stop'=>$price['price_per_stop'], 
-                    
-                ])->save();
+                        'airport_id'=>$price['airport_id'],
+                        'service_id'=> $id,
+                        'group_id'=>$price['group_id'],
+                        'shared_price'=>$price['shared_price'],	
+                        'private_price'=>$price['private_price'],
+                        'unique_price'=>$price['unique_price'],
+                        'base_borden_price'=>$price['base_borden_price'],
+                        'extra_passenger_fee'=>$price['extra_passenger_fee'],
+                        'extra_family_price'=>$price['extra_family_price'],	
+                        'parking_day_price'=>$price['parking_day_price'],
+                        'price_per_stop'=>$price['price_per_stop'], 
+                        
+                    ]);
+
+                    $NotdestroyPrice[]=[$price->id];
+
+                }else{
+
+                    $price->fill([
+
+                        'airport_id'=>$price['airport_id'],
+                        'service_id'=> $service->id,
+                        'group_id'=>$price['group_id'],
+                        'shared_price'=>$price['shared_price'],	
+                        'private_price'=>$price['private_price'],
+                        'unique_price'=>$price['unique_price'],
+                        'base_borden_price'=>$price['base_borden_price'],
+                        'extra_passenger_fee'=>$price['extra_passenger_fee'],
+                        'extra_family_price'=>$price['extra_family_price'],	
+                        'parking_day_price'=>$price['parking_day_price'],
+                        'price_per_stop'=>$price['price_per_stop'], 
+                        
+                    ])->save();
+
+                    $NotdestroyPrice[]=[$price['id']];
+
+                }
 
             }
+
+            if(count($NotdestroyPrice)==0)
+
+                $price=Price::where('service_id',$id)->delete();   
+
+            else
+
+               $price=Price::where('service_id',$id)->whereNotIn('id',$NotdestroyPrice)->delete();
 
             DB::commit();
 
