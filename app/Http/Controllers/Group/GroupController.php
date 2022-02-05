@@ -106,17 +106,44 @@ class GroupController extends Controller
                             'name' => $request->get('name'),
                         ])->save();
 
+            $NotdestroyPrice=array();
+
             foreach ($request->prices as $price) {
 
                 $price=Price::where("id",$price['id'])->first();
-            
-                $price->fill([
-                                'airport_id'=>$price['airport_id'],
-                                'shared_price'=>$price['shared_price'],	
-                                'private_price'=>$price['private_price'],
-                            ])->save();
+
+                if($price==null){
+
+                    $price=Price::create([
+                        'group_id'=>$id,
+                        'airport_id'=>$price['airport_id'],
+                        'shared_price'=>$price['shared_price'],	
+                        'private_price'=>$price['private_price'],
+                    ]);
+
+                    $NotdestroyPrice[]=[$price->id];
+
+                }else{
+
+                    $price->fill([
+                        'airport_id'=>$price['airport_id'],
+                        'shared_price'=>$price['shared_price'],	
+                        'private_price'=>$price['private_price'],
+                    ])->save();
+
+                    $NotdestroyPrice[]=[$price['id']];
+
+                }
             
             }
+
+            if(count($NotdestroyPrice)==0)
+
+                $price=Price::where('group_id',$id)->delete();   
+
+            else
+
+                $price=Price::where('group_id',$id)->whereNotIn('id',$NotdestroyPrice)->delete();
 
             DB::commit();
 
