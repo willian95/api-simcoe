@@ -31,3 +31,6 @@ Route::get("/services/edit/{id}", function($id){
 
 Route::view("/groups", "groups.index")->name("groups.index");
 
+Route::view("/towns", "towns.index")->name("towns.index");
+
+

@@ -24,7 +24,6 @@ class TownUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'=>'required|integer',
             'group_id'=>'required|integer',
             'name'=>'required|string',
         ];
@@ -33,8 +32,6 @@ class TownUpdateRequest extends FormRequest
     public function messages(){
 
         return [
-            'id.required'=>'A record must be selected!',
-            'id.integer'=>'Invalid registration!',
             'group_id.required'=>'group is required',
             'group_id.integer'=>'invalid format',
             'name.required'=>'name is required',

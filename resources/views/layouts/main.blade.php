@@ -162,6 +162,13 @@ License: You must have a valid license purchased only from themeforest(the above
 									</a>
 								</li>
 
+								<li class="menu-item text-center @if(strpos(url()->current(), 'towns') > -1) menu-item-active @endif" aria-haspopup="true">
+									<a href="{{ route('towns.index') }}" class="menu-link text-center">
+										<i class="menu-icon far fa-file-image"></i>
+										<span class="menu-text">Towns</span>
+									</a>
+								</li>
+
 								<li class="menu-item menu-item-submenu @if(strpos(url()->current(), 'services') > -1) menu-item-active @endif" aria-haspopup="true" data-menu-toggle="hover">
 									<a href="javascript:;" class="menu-link menu-toggle">
 										<i class="menu-icon far fa-file-image"></i>

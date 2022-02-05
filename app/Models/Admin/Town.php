@@ -22,7 +22,7 @@ class Town extends Model
     public function Group()
     {
 
-        return $this->belongsTo('App\Models\Admin\Group','id','group_id');
+        return $this->belongsTo('App\Models\Admin\Group','group_id','id');
         
 
     } 
