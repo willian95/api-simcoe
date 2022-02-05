@@ -9,7 +9,6 @@ use App\Http\Requests\GroupUpdateRequest;
 use App\Http\Requests\GroupDestroyRequest;
 use App\Http\Requests\GroupRestoreRequest;
 use App\Models\Admin\Group;
-use App\Models\Admin\Price;
 use Illuminate\Support\Facades\Validator;
 use Log;
 use DB;
@@ -30,20 +29,8 @@ class GroupController extends Controller
             DB::beginTransaction();
     
             $group = Group::create([
-                'service_id' => $request->get('service_id'),
                 'name' => $request->get('name'),
             ]);
-
-            foreach ($request->prices as $price) {
-
-                $price=Price::create([
-                    'group_id'=>$group->id,
-                    'airport_id'=>$price['airport_id'],
-                    'shared_price'=>$price['shared_price'],	
-                    'private_price'=>$price['private_price'],
-                ]);
-
-            }
 
             DB::commit();
 
@@ -69,7 +56,7 @@ class GroupController extends Controller
     {
         try{
 
-            $group = Group::with(['Service','Price'])->get();
+            $group = Group::get();
               
             return response()->json(["success" => true,"message" => "Data obtained successfully", "group"=>$group]);
 
@@ -102,48 +89,8 @@ class GroupController extends Controller
                 return response()->json(["success" => false, "message" => "Record not found!"], 200);
             
             $group->fill([                
-                            'service_id' => $request->get('service_id'),
                             'name' => $request->get('name'),
                         ])->save();
-
-            $NotdestroyPrice=array();
-
-            foreach ($request->prices as $price) {
-
-                $price=Price::where("id",$price['id'])->first();
-
-                if($price==null){
-
-                    $price=Price::create([
-                        'group_id'=>$id,
-                        'airport_id'=>$price['airport_id'],
-                        'shared_price'=>$price['shared_price'],	
-                        'private_price'=>$price['private_price'],
-                    ]);
-
-                    $NotdestroyPrice[]=[$price->id];
-
-                }else{
-
-                    $price->fill([
-                        'airport_id'=>$price['airport_id'],
-                        'shared_price'=>$price['shared_price'],	
-                        'private_price'=>$price['private_price'],
-                    ])->save();
-
-                    $NotdestroyPrice[]=[$price['id']];
-
-                }
-            
-            }
-
-            if(count($NotdestroyPrice)==0)
-
-                $price=Price::where('group_id',$id)->delete();   
-
-            else
-
-                $price=Price::where('group_id',$id)->whereNotIn('id',$NotdestroyPrice)->delete();
 
             DB::commit();
 
@@ -178,8 +125,6 @@ class GroupController extends Controller
 
                 return response()->json(["success" => false, "message" => "Record not found!"], 200);
 
-            $price=Price::where('group_id',$id)->delete();  
- 
             $group->delete();
 
             DB::commit();
@@ -210,8 +155,6 @@ class GroupController extends Controller
             DB::beginTransaction();
 
             $group=group::withTrashed()->find($request->id)->restore();
-
-            $price=Price::withTrashed()->where('service_id',$request->id)->restore();
 
             DB::commit();
 

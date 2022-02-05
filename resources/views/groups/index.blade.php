@@ -2,7 +2,7 @@
 
 @section("content")
 
-    <div class="d-flex flex-column-fluid" id="dev-groups">
+    <div class="d-flex flex-column-fluid" id="dev-airports">
 
         <div class="loader-cover-custom" v-if="loading == true">
 			<div class="loader-custom"></div>
@@ -15,12 +15,12 @@
                 <!--begin::Header-->
                 <div class="card-header flex-wrap border-0 pt-6 pb-0">
                     <div class="card-title">
-                        <h3 class="card-label">Groups
+                        <h3 class="card-label">Airports
                     </div>
                     <div class="card-toolbar">
 
                         <!--begin::Button-->
-                        <button href="#" class="btn btn-primary font-weight-bolder" data-toggle="modal" data-target="#groupsModal" @click="create()">
+                        <button href="#" class="btn btn-primary font-weight-bolder" data-toggle="modal" data-target="#airportsModal" @click="create()">
                         <span class="svg-icon svg-icon-md">
                             <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -31,7 +31,7 @@
                                 </g>
                             </svg>
                             <!--end::Svg Icon-->
-                        </span>New group</button>
+                        </span>New airport</button>
                         <!--end::Button-->
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                             <thead>
                                 <tr >
                                     <th class="datatable-cell datatable-cell-sort" style="width: 170px;">
-                                        <span>Group</span>
+                                        <span>Airport</span>
                                     </th>
 
                                     <th class="datatable-cell datatable-cell-sort" style="width: 170px;">
@@ -53,13 +53,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="group in groups">
+                                <tr v-for="airport in airports">
                                     <td class="datatable-cell">
-                                        @{{ group.name }}
+                                        @{{ airport.name }}
                                     </td>
                                     <td>
-                                        <button class="btn btn-info" data-toggle="modal" data-target="#groupsModal" @click="edit(group)"><i class="far fa-edit"></i></button>
-                                        <button class="btn btn-secondary" @click="erase(group.id)"><i class="far fa-trash-alt"></i></button>
+                                        <button class="btn btn-info" data-toggle="modal" data-target="#airportsModal" @click="edit(airport)"><i class="far fa-edit"></i></button>
+                                        <button class="btn btn-secondary" @click="erase(airport.id)"><i class="far fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -74,7 +74,7 @@
         </div>
         <!--end::Container-->
 
-        @include('groups.modal')
+        @include('airports.modal')
 
     </div>
 
@@ -82,6 +82,6 @@
 
 @push('scripts')
 
-    @include('groups.script')
+    @include('airports.script')
 
 @endpush

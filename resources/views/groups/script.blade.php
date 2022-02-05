@@ -5,6 +5,7 @@
         data(){
             return{
                 modalTitle:"New group",
+                id:"",
                 name:"",
                 groupId:"",
                 action:"create",
@@ -21,6 +22,7 @@
             create(){
                 this.modalTitle = "New group"
                 this.action = "create"
+                this.id = ""
                 this.name = ""
                 this.groupId = ""
 
@@ -48,10 +50,20 @@
                         $('.modal-backdrop').remove()
                     }else{
 
+                        message=res.data.message;
+                        
+                        if(res.data.status=="Token is Expired")
+                        
+                                message="Session expired";
+
                         swal({
-                            text: res.data.message,
+                            text: message,
                             icon: "error"
                         });
+
+                        if(res.data.status=="Token is Expired")
+
+                            window.location.replace("{{ url('/') }}");
 
                     }
 
@@ -65,7 +77,7 @@
             update(){
 
                 this.loading = true
-                axios.put("{{ url('/admin/group') }}"+"/"+this.groupId, {name: this.name},{
+                axios.put("{{ url('api/admin/group') }}"+"/"+this.groupId, {name: this.name}, {
                     headers:{
                         "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
                     }
@@ -104,6 +116,7 @@
             edit(group){
                 this.modalTitle = "Edit group"
                 this.action = "edit"
+                this.id = group.id
                 this.name = group.name
                 this.groupId = group.id
 
@@ -117,7 +130,7 @@
                 })
                 .then(res => {
 
-                    this.groups = res.data
+                    this.groups = res.data.group
 
                 })
 
@@ -134,7 +147,11 @@
                 .then((willDelete) => {
                     if (willDelete) {
                         this.loading = true
-                        axios.delete("{{ url('/api/admin/group') }}"+"/"+id).then(res => {
+                        axios.delete("{{ url('/api/admin/group') }}"+"/"+id, {
+                            headers:{
+                                "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                            }
+                        }).then(res => {
                             this.loading = false
                             if(res.data.success == true){
                                 swal({

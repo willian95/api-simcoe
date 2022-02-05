@@ -25,12 +25,9 @@ class GroupUpdateRequest extends FormRequest
     {
 
         return [
-            //Group
-           'id'=>'required|integer',
+
            'name'=>'required|string',
-           'service_id'=>'required|integer',
-            //Price
-            'prices'=>'required|array',
+           
         ];  
 
     }
@@ -38,16 +35,10 @@ class GroupUpdateRequest extends FormRequest
     public function messages(){
 
         return [
-            //Group
-            'id.required'=>'A record must be selected!',
-            'id.integer'=>'Invalid registration!',
-            'service_id.required'=>'service is required',
-            'service_id.integer'=>'invalid format',
+
             'name.required'=>'name is required',
             'name.string'=>'invalid format',
-            //Price
-            'prices.required'=>'prices is required',
-            'prices.array'=>'invalid format',
+
         ];
 
     }
