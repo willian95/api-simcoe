@@ -15,7 +15,7 @@
                 maxPassengers:"{{ $vehicle->max_passenger }}",
                 pictureStatus:"",
                 imageProgress:"",
-                imagePreview:"",
+                imagePreview:"{{ $vehicle->picture }}",
                 file:"",
                 finalPictureName:"",
                 is_private:"{{ $vehicle->is_private == 0 ? 'false' : 'true'}}",
@@ -64,7 +64,7 @@
                 }else{
 
                     swal({
-                        text:"Formato no permitido",
+                        text:"Format not supported",
                         "icon": "error"
                     })
 
@@ -122,10 +122,7 @@
 
                 }else{
 
-                    swal({
-                        text:"No hay imagen para subir",
-                        "icon": "error"
-                    })
+                    this.update()
 
 
                 }

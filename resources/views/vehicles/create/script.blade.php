@@ -65,7 +65,7 @@
                 }else{
 
                     swal({
-                        text:"Formato no permitido",
+                        text:"Format not supported",
                         "icon": "error"
                     })
 
@@ -149,7 +149,7 @@
                 }else{
 
                     swal({
-                        text:"No hay imagen para subir",
+                        text:"No image to upload",
                         "icon": "error"
                     })
 
