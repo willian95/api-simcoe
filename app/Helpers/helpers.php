@@ -12,13 +12,13 @@ function picture($request,$id)
 
         $fileType = "";
 
-        $originName = $request->file('file')->getClientOriginalName();
+        $originName = $request->file('picture')->getClientOriginalName();
     
-        $extension = $request->file('file')->getClientOriginalExtension();
+        $extension = $request->file('picture')->getClientOriginalExtension();
     
         $fileName = $id.'.'.$extension;
     
-        $request->file('file')->move(public_path('picture'), $fileName);
+        $request->file('picture')->move(public_path('picture'), $fileName);
     
         $fileRoute = url('/').'/picture/'.$fileName;
 

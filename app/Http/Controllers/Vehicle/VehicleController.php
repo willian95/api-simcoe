@@ -33,17 +33,8 @@ class VehicleController extends Controller
                 'max_passenger' => $request->get('max_passenger'),
                 'is_private' => $request->get('is_private'),
                 'is_shared' => $request->get('is_shared'),
+                'picture' => $request->get('picture'),
             ]);
-
-            if($request->hasFile('picture'))
-            {
-
-                $vehicle->picture = picture($request,$vehicle->id);
-
-                $vehicle->save();
-
-            }
-
 
             DB::commit();
 
@@ -69,9 +60,27 @@ class VehicleController extends Controller
     {
         try{
 
-            $vehicle = Vehicle::with(['Sevice'])->get();
+            $vehicle = Vehicle::with(['Service'])->get();
+
+            $array=array();
+
+            foreach ($vehicle as &$valor) {
+
+                $array[]=[
+
+                    'id' =>$valor->id,
+                    'service_id' => $valor->Service->id,
+                    'serviceName' => $valor->Service->name,
+                    'name' =>$valor->name,
+                    'max_passenger' => $valor->max_passenger,
+                    'is_private' => $valor->is_private ==1 ? true : false,
+                    'is_shared' => $valor->is_shared==1 ? true : false,
+                    'picture' => $valor->picture,
+
+                ];
+            }
               
-            return response()->json(["success" => true,"message" => "Data obtained successfully", "vehicle"=>$vehicle]);
+            return response()->json(["success" => true,"message" => "Data obtained successfully", "vehicle"=>$array]);
 
         }catch(\Exception $e){
 
@@ -96,7 +105,6 @@ class VehicleController extends Controller
             DB::beginTransaction();
     
             $vehicle=Vehicle::where("id",$id)->first();
-
             if($vehicle==null)
 
                 return response()->json(["success" => false, "message" => "Record not found!"], 200);
@@ -104,10 +112,10 @@ class VehicleController extends Controller
             $vehicle->fill([                
                 'service_id' => $request->get('service_id'),
                 'name' => $request->get('name'),
-                'picture' =>picture($request,$id),
                 'max_passenger' => $request->get('max_passenger'),
                 'is_private' => $request->get('is_private'),
                 'is_shared' => $request->get('is_shared'),
+                'picture' => $request->get('picture')==null?"":$request->get('picture'),
                 ])->save();
 
             DB::commit();

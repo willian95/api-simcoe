@@ -172,6 +172,40 @@ License: You must have a valid license purchased only from themeforest(the above
 								<li class="menu-item menu-item-submenu @if(strpos(url()->current(), 'services') > -1) menu-item-active @endif" aria-haspopup="true" data-menu-toggle="hover">
 									<a href="javascript:;" class="menu-link menu-toggle">
 										<i class="menu-icon far fa-file-image"></i>
+										<span class="menu-text">Vehicles</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item menu-item-parent" aria-haspopup="true">
+												<span class="menu-link">
+													<span class="menu-text">Actions</span>
+												</span>
+											</li>
+											<li class="menu-item" aria-haspopup="true">
+												<a href="{{ route('vehicles.create') }}" class="menu-link">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">Create</span>
+												</a>
+											</li>
+											<li class="menu-item" aria-haspopup="true">
+												<a href="{{ route('vehicles.index') }}" class="menu-link">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">List</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</li>
+
+								<li class="menu-item menu-item-submenu @if(strpos(url()->current(), 'services') > -1) menu-item-active @endif" aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<i class="menu-icon far fa-file-image"></i>
 										<span class="menu-text">Services</span>
 										<i class="menu-arrow"></i>
 									</a>
