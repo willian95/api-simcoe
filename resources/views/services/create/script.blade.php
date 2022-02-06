@@ -7,15 +7,8 @@
 
                 loading:false,
                 errors:[],
-                airports:[
-                    {id: 1, name:"Pearson Airport"},
-                    {id: 2, name:"Billy Bishop Airport"},
-                ],
-                groups:[
-                    {id:1, name: "Group A"},
-                    {id:2, name: "Group B"},
-                    {id:3, name: "Group C"}
-                ],
+                airports:[],
+                groups:[],
                 prices:[],
                 serviceTypes:[],
 
@@ -444,6 +437,19 @@
                 })
 
             },
+            async fetchGroups(){
+                axios.get("{{ url('/api/admin/group') }}", {
+                    headers:{
+                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
+                .then(res => {
+
+                    this.groups = res.data.group
+
+                })
+
+            },
             async createEditor(idTag){
 
                 const editor = await ClassicEditor.create( document.querySelector( '#'+idTag ) )
@@ -469,6 +475,7 @@
         mounted(){
 
             this.fetchAirports()
+            this.fetchGroups()
             this.createEditor("editorDescription")
             this.createEditor("editorAdvice")
             this.createEditor("editorSecondaryAdvice")

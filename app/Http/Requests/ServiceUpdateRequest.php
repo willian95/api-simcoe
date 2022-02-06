@@ -32,7 +32,6 @@ class ServiceUpdateRequest extends FormRequest
            'icon'=>'nullable|string',
            'description'=>'required|string',
             //ServiceInfoRate
-           'info_rates.id'=>'required|integer',
            'info_rates.max_pets'=>'required|integer',
            'info_rates.max_bags'=>'required|integer',
            'info_rates.max_passenger'=>'required|integer',

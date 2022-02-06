@@ -8,11 +8,7 @@
                 loading:false,
                 errors:[],
                 airports:[],
-                groups:[
-                    {id:1, name: "Group A"},
-                    {id:2, name: "Group B"},
-                    {id:3, name: "Group C"}
-                ],
+                groups:[],
                 prices:JSON.parse('{!! $service->Prices !!}'),
                 serviceTypes:JSON.parse('{!! $service->ServiceTypes !!}'),
 
@@ -232,17 +228,17 @@
                 if(this.pricesHasErrors()){
                     return 
                 }
-
+             
                 this.prices[this.priceId].airport = this.selectedAirport
                 this.prices[this.priceId].group = this.selectedGroup
-                this.prices[this.priceId].sharedPrice = this.sharedPrice
-                this.prices[this.priceId].privatePrice = this.privatePrice
-                this.prices[this.priceId].uniquePrice = this.uniquePrice
-                this.prices[this.priceId].baseBordenPrice = this.baseBordenPrice
-                this.prices[this.priceId].extraPassengerFee = this.extraPassengerFee
-                this.prices[this.priceId].extraFamilyPrice = this.extraFamilyPrice
-                this.prices[this.priceId].parkingDayPrice = this.parkingDayPrice
-                this.prices[this.priceId].pricePerStops = this.pricePerStops
+                this.prices[this.priceId].shared_price = this.sharedPrice
+                this.prices[this.priceId].private_price = this.privatePrice
+                this.prices[this.priceId].unique_price = this.uniquePrice
+                this.prices[this.priceId].base_borden_price = this.baseBordenPrice
+                this.prices[this.priceId].extra_passenger_fee = this.extraPassengerFee
+                this.prices[this.priceId].extra_family_price = this.extraFamilyPrice
+                this.prices[this.priceId].parking_day_price = this.parkingDayPrice
+                this.prices[this.priceId].price_per_stops = this.pricePerStops
 
             },
             pricesHasErrors(){
@@ -439,6 +435,19 @@
                 })
 
             },
+            async fetchGroups(){
+                axios.get("{{ url('/api/admin/group') }}", {
+                    headers:{
+                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
+                .then(res => {
+
+                    this.groups = res.data.group
+
+                })
+
+            },
             async createEditor(idTag){
 
                 const editor = await ClassicEditor.create( document.querySelector( '#'+idTag ) )
@@ -468,6 +477,7 @@
         mounted(){
 
             this.fetchAirports()
+            this.fetchGroups()
             this.createEditor("editorDescription")
             this.createEditor("editorAdvice")
             this.createEditor("editorSecondaryAdvice")

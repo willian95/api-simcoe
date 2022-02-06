@@ -46,6 +46,9 @@
                                     <th class="datatable-cell datatable-cell-sort" style="width: 170px;">
                                         <span>Town</span>
                                     </th>
+                                    <th class="datatable-cell datatable-cell-sort" style="width: 170px;">
+                                        <span>Group</span>
+                                    </th>
 
                                     <th class="datatable-cell datatable-cell-sort" style="width: 170px;">
                                         <span>Actions</span>
@@ -57,6 +60,9 @@
                                     <td class="datatable-cell">
                                         @{{ town.name }}
                                     </td>
+                                    <td class="datatable-cell">
+                                        <span v-if="groups.length > 0">@{{ groups.find(data => data.id == town.group_id).name }}</span>
+                                    </td>
                                     <td>
                                         <button class="btn btn-info" data-toggle="modal" data-target="#townsModal" @click="edit(town)"><i class="far fa-edit"></i></button>
                                         <button class="btn btn-secondary" @click="erase(town.id)"><i class="far fa-trash-alt"></i></button>
@@ -67,12 +73,35 @@
                         
                     </div>
                     <!--end: Datatable-->
+
+                    <div class="row w-100">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="dataTables_info" id="kt_datatable_info" role="status" aria-live="polite">Showing page @{{ currentPage }} of @{{ totalPages }}</div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="dataTables_paginate paging_full_numbers" id="kt_datatable_paginate">
+                                <ul class="pagination">
+                                    
+                                    <li class="paginate_button page-item active" v-for="(link, index) in links">
+                                        <a style="cursor: pointer" aria-controls="kt_datatable" tabindex="0" :class="link.active == false ? linkClass : activeLinkClass":key="index" @click="fetch(link.url)" v-html="link.label"></a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <!--end::Body-->
+
+                
             </div>
             <!--end::Card-->
+
         </div>
         <!--end::Container-->
+
+        
 
         @include('towns.modal')
 

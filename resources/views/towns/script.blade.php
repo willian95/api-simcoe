@@ -13,15 +13,21 @@
                 group_id:"",
                 towns:[],
                 errors:[],
-                pages:0,
-                page:1,
                 showMenu:false,
                 loading:false,
+
+                links:[],
+                currentPage:"",
+                totalPages:"",
+                linkClass:"page-link",
+                activeLinkClass:"page-link active-link bg-main"
+
             }
         },
         methods:{
             
             create(){
+                this.errors = []
                 this.modalTitle = "New town"
                 this.action = "create"
                 this.id = ""
@@ -117,6 +123,7 @@
 
             },
             edit(town){
+                this.errors = []
                 this.modalTitle = "Edit town"
                 this.action = "edit"
                 this.id = town.id
@@ -125,16 +132,20 @@
                 this.townId = town.id
 
             },
-            fetch(){
+            fetch(link = "{{ url('/api/admin/town') }}"){
 
-                axios.get("{{ url('/api/admin/town') }}", {
+                axios.get(link, {
                     headers:{
                         "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
                     }
                 })
                 .then(res => {
 
-                    this.towns = res.data.town
+                    this.towns = res.data.town.data
+                    this.links = res.data.town.links
+                    this.currentPage = res.data.town.current_page
+                    this.totalPages = res.data.town.last_page
+
 
                 })
 

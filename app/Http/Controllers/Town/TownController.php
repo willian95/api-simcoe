@@ -10,8 +10,8 @@ use App\Http\Requests\TownDestroyRequest;
 use App\Http\Requests\TownRestoreRequest;
 use App\Models\Admin\Town;
 use Illuminate\Support\Facades\Validator;
-use Log;
-use DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 
 class TownController extends Controller
@@ -58,7 +58,7 @@ class TownController extends Controller
     {
         try{
 
-            $town = Town::with(['Group'])->get();
+            $town = Town::with(['Group'])->paginate(15);
               
             return response()->json(["success" => true,"message" => "Data obtained successfully", "town"=>$town]);
 

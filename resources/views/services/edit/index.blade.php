@@ -281,7 +281,7 @@
                     <div class="row">
                         <div class="col-12">
                             <p class="text-center">
-                                <button class="btn btn-success" @click="uploadMainImage()">Upload</button>
+                                <button class="btn btn-success" @click="uploadMainImage()">Update</button>
                             </p>
                         </div>
                     </div>

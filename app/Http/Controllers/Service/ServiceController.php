@@ -13,8 +13,8 @@ use App\Models\Admin\ServiceInfoRate;
 use App\Models\Admin\ServiceType;
 use App\Models\Admin\Price;
 use Illuminate\Support\Facades\Validator;
-use Log;
-use DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
@@ -145,7 +145,6 @@ class ServiceController extends Controller
                   'name'=> $request->get('name'),
                   'is_shared_and_private'=> $request->get('is_shared_and_private'),
                   'has_groups'=> $request->get('has_groups'),
-                  'icon'=> $request->get('icon'),
                   'depot_address'=> $request->get('depot_address'),
                   'description'=> $request->get('description'),
                   'advice'=> $request->get('advice'),
@@ -155,7 +154,12 @@ class ServiceController extends Controller
                   'purchase_advice'=> $request->get('purchase_advice'),
             ])->save();
 
-            $serviceInfoRate=ServiceInfoRate::where("id",$request->info_rates['id'])->first();
+            if($request->get("icon") != ""){
+                $service->icon = $request->get("icon");
+                $service->update();
+            }
+
+            $serviceInfoRate=ServiceInfoRate::where("service_id",$service->id)->first();
 
             if($serviceInfoRate==null)
 
@@ -173,9 +177,9 @@ class ServiceController extends Controller
 
             foreach ($request->service_types as $service_type) {
 
-                $serviceType=ServiceType::where("id",$service_type['id'])->first();
+                
 
-                if($serviceType==null){
+                if(!array_key_exists("id", $service_type)){
 
                     $serviceType=ServiceType::create([
                         'service_id'=> $id,
@@ -187,7 +191,7 @@ class ServiceController extends Controller
                     $NotdestroyServiceType[]=[$serviceType->id];
 
                 }else{
-
+                    $serviceType=ServiceType::where("id",$service_type['id'])->first();
                     $serviceType->fill([
                         'name'=> $service_type['name'],
                         'is_only_private'=> $service_type['is_only_private'],
@@ -212,11 +216,9 @@ class ServiceController extends Controller
 
             foreach ($request->prices as $price) {
 
-                $price=Price::where("id",$price['id'])->first();
-
-                if($price==null){
+                if(!array_key_exists("id", $price)){
  
-                    $price=Price::create([
+                    $priceModel=Price::create([
 
                         'airport_id'=>$price['airport_id'],
                         'service_id'=> $id,
@@ -232,25 +234,27 @@ class ServiceController extends Controller
                         
                     ]);
 
-                    $NotdestroyPrice[]=[$price->id];
+                    $NotdestroyPrice[]=[$priceModel->id];
 
                 }else{
 
-                    $price->fill([
+                    $priceModel=Price::where("id",$price['id'])->first();
 
-                        'airport_id'=>$price['airport_id'],
+                    $priceModel->fill([
+
+                        'airport_id'=>$price["airport_id"],
                         'service_id'=> $service->id,
-                        'group_id'=>$price['group_id'],
-                        'shared_price'=>$price['shared_price'],	
-                        'private_price'=>$price['private_price'],
-                        'unique_price'=>$price['unique_price'],
-                        'base_borden_price'=>$price['base_borden_price'],
-                        'extra_passenger_fee'=>$price['extra_passenger_fee'],
-                        'extra_family_price'=>$price['extra_family_price'],	
-                        'parking_day_price'=>$price['parking_day_price'],
-                        'price_per_stop'=>$price['price_per_stop'], 
+                        'group_id'=>$price["group_id"],
+                        'shared_price'=>$price["shared_price"],	
+                        'private_price'=>$price["private_price"],
+                        'unique_price'=>$price["unique_price"],
+                        'base_borden_price'=>$price["base_borden_price"],
+                        'extra_passenger_fee'=>$price["extra_passenger_fee"],
+                        'extra_family_price'=>$price["extra_family_price"],	
+                        'parking_day_price'=>$price["parking_day_price"],
+                        'price_per_stop'=>$price["price_per_stop"], 
                         
-                    ])->save();
+                    ])->update();
 
                     $NotdestroyPrice[]=[$price['id']];
 
