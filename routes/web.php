@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Admin\Service;
+use App\Models\Admin\Vehicle;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,5 +33,17 @@ Route::get("/services/edit/{id}", function($id){
 Route::view("/groups", "groups.index")->name("groups.index");
 
 Route::view("/towns", "towns.index")->name("towns.index");
+
+Route::view("/vehicles", "vehicles.list.index")->name("vehicles.index");
+
+Route::view("/vehicles/create", "vehicles.create.index")->name("vehicles.create");
+
+Route::get("/vehicles/edit/{id}", function($id){
+
+    $vehicle = Vehicle::with(['Service'])->where("id", $id)->first();
+
+    return view("vehicles.edit.index", ["vehicle" => $vehicle]);
+
+});
 
 

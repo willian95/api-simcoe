@@ -28,7 +28,6 @@ class VehicleStoreRequest extends FormRequest
            'service_id'=>'required|integer',
            'name'=>'required|string',
            'max_passenger'=>'required|integer',
-           'picture'=>'nullable|sometimes|image|mimes:jpeg,png,jpg',
         ];  
 
     }
