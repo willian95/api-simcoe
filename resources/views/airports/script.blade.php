@@ -1,41 +1,42 @@
 <script>
-        
-    const app = new Vue({
-        el: '#dev-airports',
-        data(){
-            return{
-                modalTitle:"New airport",
-                name:"",
-                airportId:"",
-                action:"create",
-                airports:[],
-                errors:[],
-                pages:0,
-                page:1,
-                showMenu:false,
-                loading:false,
-            }
+const app = new Vue({
+    el: '#dev-airports',
+    data() {
+        return {
+            modalTitle: "New airport",
+            name: "",
+            airportId: "",
+            action: "create",
+            airports: [],
+            errors: [],
+            pages: 0,
+            page: 1,
+            showMenu: false,
+            loading: false,
+        }
+    },
+    methods: {
+
+        create() {
+            this.modalTitle = "New airport"
+            this.action = "create"
+            this.name = ""
+            this.airportId = ""
+
         },
-        methods:{
-            
-            create(){
-                this.modalTitle = "New airport"
-                this.action = "create"
-                this.name = ""
-                this.airportId = ""
+        store() {
 
-            },
-            store(){
-
-                this.loading = true
-                axios.post("{{ url('/api/admin/airport') }}", {name: this.name}, {
-                    headers:{
-                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+            this.loading = true
+            axios.post("{{ url('/api/admin/airport') }}", {
+                    name: this.name
+                }, {
+                    headers: {
+                        "Authorization": "Bearer " + window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
                     }
                 })
                 .then(res => {
                     this.loading = false
-                    if(res.data.success == true){
+                    if (res.data.success == true) {
 
                         swal({
                             text: res.data.message,
@@ -46,7 +47,7 @@
 
                         $('#airportsModal').modal('hide')
                         $('.modal-backdrop').remove()
-                    }else{
+                    } else {
 
                         swal({
                             text: res.data.message,
@@ -61,18 +62,20 @@
                     this.errors = err.response.data.errors
                 })
 
-            },
-            update(){
+        },
+        update() {
 
-                this.loading = true
-                axios.put("{{ url('api/admin/airport') }}"+"/"+this.airportId, {name: this.name}, {
-                    headers:{
-                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+            this.loading = true
+            axios.put("{{ url('api/admin/airport') }}" + "/" + this.airportId, {
+                    name: this.name
+                }, {
+                    headers: {
+                        "Authorization": "Bearer " + window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
                     }
                 })
                 .then(res => {
                     this.loading = false
-                    if(res.data.success == true){
+                    if (res.data.success == true) {
 
                         swal({
                             text: res.data.message,
@@ -80,12 +83,12 @@
                         });
                         this.name = ""
                         this.airportId = ""
- 
+
                         $('#airportsModal').modal('hide')
                         $('.modal-backdrop').remove()
                         this.fetch()
-                        
-                    }else{
+
+                    } else {
 
                         swal({
                             text: res.data.message,
@@ -100,19 +103,19 @@
                     this.errors = err.response.data.errors
                 })
 
-            },
-            edit(airport){
-                this.modalTitle = "Edit airport"
-                this.action = "edit"
-                this.name = airport.name
-                this.airportId = airport.id
+        },
+        edit(airport) {
+            this.modalTitle = "Edit airport"
+            this.action = "edit"
+            this.name = airport.name
+            this.airportId = airport.id
 
-            },
-            fetch(){
+        },
+        fetch() {
 
-                axios.get("{{ url('/api/admin/airport') }}", {
-                    headers:{
-                        "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+            axios.get("{{ url('/api/admin/airport') }}", {
+                    headers: {
+                        "Authorization": "Bearer " + window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
                     }
                 })
                 .then(res => {
@@ -121,10 +124,10 @@
 
                 })
 
-            },
-            erase(id){
-                
-                swal({
+        },
+        erase(id) {
+
+            swal({
                     title: "Are you sure?",
                     text: "You will delete this airport!",
                     icon: "warning",
@@ -134,19 +137,19 @@
                 .then((willDelete) => {
                     if (willDelete) {
                         this.loading = true
-                        axios.delete("{{ url('/api/admin/airport') }}"+"/"+id, {
-                            headers:{
-                                "Authorization": "Bearer "+window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                        axios.delete("{{ url('/api/admin/airport') }}" + "/" + id, {
+                            headers: {
+                                "Authorization": "Bearer " + window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
                             }
                         }).then(res => {
                             this.loading = false
-                            if(res.data.success == true){
+                            if (res.data.success == true) {
                                 swal({
                                     text: res.data.message,
                                     icon: "success"
                                 });
                                 this.fetch()
-                            }else{
+                            } else {
 
                                 swal({
                                     text: res.data.message,
@@ -157,7 +160,7 @@
 
                         }).catch(err => {
                             this.loading = false
-                            $.each(err.response.data.errors, function(key, value){
+                            $.each(err.response.data.errors, function(key, value) {
                                 alert(value)
                             });
                         })
@@ -165,27 +168,68 @@
                     }
                 });
 
-            },
-            toggleMenu(){
+        },
+        toggleMenu() {
 
-                if(this.showMenu == false){
-                    $("#menu").addClass("show")
-                    this.showMenu = true
-                }else{
-                    $("#menu").removeClass("show")
-                    this.showMenu = false
-                }
-
+            if (this.showMenu == false) {
+                $("#menu").addClass("show")
+                this.showMenu = true
+            } else {
+                $("#menu").removeClass("show")
+                this.showMenu = false
             }
 
-
         },
-        mounted(){
-            
-            this.fetch()
 
-        }
+        authenticated() {
 
-    })
+            this.loading = true
 
+            axios.post("{{ url('api/admin/authenticatedUser') }}", {}, {
+                    headers: {
+                        "Authorization": "Bearer " + window.localStorage.getItem("SIMCOE_AUTH_TOKEN")
+                    }
+                })
+                .then(res => {
+
+                    this.loading = false
+
+                    if (res.data.success == false) {
+
+                        swal({
+                            text: res.data.message,
+                            icon: "error"
+                        }).then(() => {
+                            window.location.replace("{{ url('/') }}");
+                        });
+
+                    }
+
+                })
+                .catch(err => {
+
+                    this.loading = false
+
+                    if (err.response.data.message == "Malformed token")
+
+                        swal({
+                            text: "Session Invalid",
+                            icon: "error"
+                        }).then(() => {
+                            window.location.replace("{{ url('/') }}");
+                        });
+
+                })
+        },
+
+    },
+    mounted() {
+
+        this.authenticated();
+
+        this.fetch()
+
+    }
+
+})
 </script>

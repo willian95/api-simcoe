@@ -26,11 +26,11 @@ use App\Http\Controllers\Town\TownController;
 
 Route::group(["prefix" => "admin"], function(){
 
-    
+    Route::post('/authenticatedUser', [UserController::class, 'getAuthenticatedUser'])->name("admin.authenticatedUser");
+
     Route::post('/register', [UserController::class, 'register'])->name("admin.register");
 
     Route::post('/login', [UserController::class, 'authenticate'])->name("admin.login");
-
 
     Route::group(['middleware' => ['VerifyToken']], function() {
         

@@ -28,14 +28,15 @@ class VerifyToken extends BaseMiddleware
 
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
 
-                return response()->json(['status' => 'Token is Invalid']);
+                return response()->json(["success" => false,"message" => "Session is Invalid"]);
 
             }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
 
-                return response()->json(['status' => 'Token is Expired']);
+                return response()->json(["success" => false,"message" => "Session is Expired"]);
 
             }else{
-                return response()->json(['status' => 'Authorization Token not found']);
+
+                return response()->json(["success" => false,"message" => "Authorization User not found"]);
 
             }
         }

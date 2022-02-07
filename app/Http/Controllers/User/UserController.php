@@ -53,19 +53,19 @@ class UserController extends Controller
 
                 Log::error($e->getStatusCode());
                 
-                return response()->json(["success" => false,"message" => "Token expired"]);
+                return response()->json(["success" => false,"message" => "Session expired"]);
 
             } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
 
                 Log::error($e->getStatusCode());
                 
-                return response()->json(["success" => false,"message" => "Token invalid"]);
+                return response()->json(["success" => false,"message" => "Session invalid"]);
 
             } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
 
                     Log::error($e->getStatusCode());
                 
-                    return response()->json(["success" => false,"message" => "Token Absent"]);
+                    return response()->json(["success" => false,"message" => "Session Absent"]);
 
             }
 
