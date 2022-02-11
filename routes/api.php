@@ -23,6 +23,10 @@ use App\Http\Controllers\Town\TownController;
 |   //
 */
 
+route::get('/services', [ServiceController::class, 'getServices'])->name("services");
+
+route::get('/services/{id}', [ServiceController::class, 'getService'])->name("services.service");
+
 
 Route::group(["prefix" => "admin"], function(){
 

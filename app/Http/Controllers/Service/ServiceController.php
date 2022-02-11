@@ -12,6 +12,7 @@ use App\Models\Admin\Service;
 use App\Models\Admin\ServiceInfoRate;
 use App\Models\Admin\ServiceType;
 use App\Models\Admin\Price;
+use App\Models\Admin\Group;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -360,4 +361,124 @@ class ServiceController extends Controller
 
         }
     }
+
+    /**
+     * List of saved records.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getServices()
+    {
+        try{
+
+            $dataServices = Service::with(['ServiceInfoRate','ServiceTypes','Prices.Group'])->get();
+
+            $services=array();
+
+            $prices=array();
+
+            foreach($dataServices as &$service){
+
+                $services=[
+                    'id'                   =>$service->id,
+                    'name'                 =>$service->name,
+                    'is_shared_and_private'=>$service->is_shared_and_private==0?'false':'true',
+                    'has_groups'           =>$service->has_groups==0?'false':'true',
+                    'icon'                 =>$service->icon,
+                    'depot_address'        =>$service->depot_address,
+                    'description'          =>$service->description,
+                    'advice'               =>$service->advice,
+                    'second_advice'        =>$service->second_advice,
+                    'apply_sold_out'       =>$service->apply_sold_out==0?'false':'true',
+                    'is_sold_out'          =>$service->is_sold_out==0?'false':'true',
+                    'purchase_advice'      =>$service->purchase_advice,
+                    'prices'               =>[] ,
+                    ];
+
+                if($service->has_groups==true || $service->has_groups==1){
+
+                    $Group = Group::with(['Price'])->where('service_id',$service->id)->get();
+
+                    $prices=$Group->Price;
+
+                }else{
+
+                    $prices=$service->Prices;
+
+                }
+
+
+                $services['prices']=$prices;
+
+
+            }
+              
+            return response()->json(["success" => true,"message" => "Data obtained successfully", "service"=>$services]);
+
+        }catch(\Exception $e){
+
+            Log::error($e);
+
+            return response()->json(["success" => false, "message" => "There was an error trying to get the data"], 200);
+
+        }
+    }
+
+    public function getService($id)
+    {
+        try{
+
+            $dataServices = Service::with(['ServiceInfoRate','ServiceTypes','Prices.Group'])->where('id',$id)->get();
+
+            $services=array();
+
+            $prices=array();
+
+            foreach($dataServices as &$service){
+
+                $services=[
+                    'id'                   =>$service->id,
+                    'name'                 =>$service->name,
+                    'is_shared_and_private'=>$service->is_shared_and_private==0?'false':'true',
+                    'has_groups'           =>$service->has_groups==0?'false':'true',
+                    'icon'                 =>$service->icon,
+                    'depot_address'        =>$service->depot_address,
+                    'description'          =>$service->description,
+                    'advice'               =>$service->advice,
+                    'second_advice'        =>$service->second_advice,
+                    'apply_sold_out'       =>$service->apply_sold_out==0?'false':'true',
+                    'is_sold_out'          =>$service->is_sold_out==0?'false':'true',
+                    'purchase_advice'      =>$service->purchase_advice,
+                    'prices'               =>[] ,
+                    ];
+
+                if($service->has_groups==true || $service->has_groups==1){
+
+                    $Group = Group::with(['Price'])->where('service_id',$service->id)->get();
+
+                    $prices=$Group->Price;
+
+                }else{
+
+                    $prices=$service->Prices;
+
+                }
+
+
+                $services['prices']=$prices;
+
+
+            }
+              
+            return response()->json(["success" => true,"message" => "Data obtained successfully", "service"=>$services]);
+
+        }catch(\Exception $e){
+
+            Log::error($e);
+
+            return response()->json(["success" => false, "message" => "There was an error trying to get the data"], 200);
+
+        }
+    }
+
 }
