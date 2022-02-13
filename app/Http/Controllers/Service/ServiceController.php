@@ -436,24 +436,8 @@ class ServiceController extends Controller
                     'apply_sold_out'       =>$service->apply_sold_out==0?'false':'true',
                     'is_sold_out'          =>$service->is_sold_out==0?'false':'true',
                     'purchase_advice'      =>$service->purchase_advice,
-                    'prices'               =>[] ,
+                    'prices'               =>$service->Prices  ,
                     ];
-
-                if($service->has_groups==true || $service->has_groups==1){
-
-                    $Group = Group::with(['Price'])->where('service_id',$service->id)->get();
-
-                    $prices=$Group->Price;
-
-                }else{
-
-                    $prices=$service->Prices;
-
-                }
-
-
-                $services['prices']=$prices;
-
 
             }
               
