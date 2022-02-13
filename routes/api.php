@@ -11,6 +11,8 @@ use App\Http\Controllers\Group\GroupController;
 use App\Http\Controllers\Town\TownController;
 use App\Http\Controllers\ServiceType\ServiceTypeController;
 use App\Http\Controllers\Checkout\CheckoutController;
+use App\Http\Controllers\PaymentType\PaymentTypeController;
+use App\Http\Controllers\DriverRequest\DriverRequestController;
 
 
 /*
@@ -40,6 +42,7 @@ route::get('/service-types/service/{service_id}', [ServiceTypeController::class,
 route::get('/service-types/info/{service_type_id}', [ServiceTypeController::class, 'ServiceTypeInfoSearch'])->name("serviceTypes.info");
 
 route::post('checkout/encrypt-total', [CheckoutController::class, 'EncryptTotal'])->name("checkout.EncryptTotal");
+
 
 Route::group(["prefix" => "admin"], function(){
 
@@ -116,6 +119,30 @@ Route::group(["prefix" => "admin"], function(){
         route::delete('/town/{town_id}', [TownController::class, 'destroy'])->name("admin.town.delete");
             
         route::post('/town/restore', [TownController::class, 'restore'])->name("admin.town.restore");
+
+        //PaymentType
+
+        route::post('/payment_type', [PaymentTypeController::class, 'store'])->name("admin.paymentType");
+
+        route::get('/payment_type', [PaymentTypeController::class, 'list'])->name("admin.paymentType.list");
+                
+        route::put('/payment_type/{payment_type_id}', [PaymentTypeController::class, 'update'])->name("admin.paymentType.update");
+            
+        route::delete('/payment_type/{payment_type_id}', [PaymentTypeController::class, 'destroy'])->name("admin.paymentType.delete");
+                
+        route::post('/payment_type/restore', [PaymentTypeController::class, 'restore'])->name("admin.paymentType.restore");   
+
+        //DriverRequest
+
+        route::post('/driver_request', [DriverRequestController::class, 'store'])->name("admin.driverRequest");
+
+        route::get('/driver_request', [DriverRequestController::class, 'list'])->name("admin.driverRequest.list");
+                        
+        route::put('/driver_request/{driver_request_id}', [DriverRequestController::class, 'update'])->name("admin.driverRequest.update");
+                    
+        route::delete('/driver_request/{driver_request_id}', [DriverRequestController::class, 'destroy'])->name("admin.driverRequest.delete");
+                        
+        route::post('/driver_request/restore', [DriverRequestController::class, 'restore'])->name("admin.driverRequest.restore");   
 
     });
 
