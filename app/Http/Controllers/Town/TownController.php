@@ -8,6 +8,7 @@ use App\Http\Requests\TownStoreRequest;
 use App\Http\Requests\TownUpdateRequest;
 use App\Http\Requests\TownDestroyRequest;
 use App\Http\Requests\TownRestoreRequest;
+use App\Http\Requests\TownSearchRequest;
 use App\Models\Admin\Town;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
@@ -173,4 +174,71 @@ class TownController extends Controller
 
         }
     }
+    /**
+     * List of saved records.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getTowns($town)
+    {
+        try{
+
+            $towns = Town::where('name', 'LIKE','%'.$town.'%')->get();
+              
+            if(count($towns)==0)
+
+                return response()->json(["success" => false, "message" => "record not found"], 200);
+
+            return response()->json(["success" => true,"message" => "Data obtained successfully", "town"=>$towns]);
+
+        }catch(\Exception $e){
+
+            Log::error($e);
+
+            return response()->json(["success" => false, "message" => "There was an error trying to get the data"], 200);
+
+        }
+    }
+
+    /**
+     * Get group .
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function townSearch(TownSearchRequest $request)
+    {
+        try{
+
+            $towns = Town::with(['Group.Price'])->where('name', 'LIKE','%'.$request->town.'%')->get();
+
+            if(count($towns)==0)
+
+                return response()->json(["success" => false, "message" => "record not found"], 200);
+
+            $town=array();
+    
+            foreach($towns as &$value){   
+
+                $town[]=[
+
+                    'id'=>$value->id,
+                    'town_name'=>$value->name,
+                    'group_id'=>$value->group_id,
+                    'group_name'=>$value->Group->name,
+                    'prices'=>$value->Group->Price,
+
+                ];
+            }
+
+            return response()->json(["success" => true,"message" => "Data obtained successfully", "town"=>$town]);
+
+        }catch(\Exception $e){
+
+            Log::error($e);
+
+            return response()->json(["success" => false, "message" => "There was an error trying to get the data"], 200);
+
+        }
+    }
+    
 }

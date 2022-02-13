@@ -23,14 +23,25 @@ use App\Http\Controllers\Town\TownController;
 |   //
 */
 
+
+
+
 route::get('/services', [ServiceController::class, 'getServices'])->name("services");
 
 route::get('/services/{id}', [ServiceController::class, 'getService'])->name("services.service");
+
+route::get('/towns/{town}', [TownController::class, 'getTowns'])->name("towns.town");
+
+route::post('/services/town-search/', [TownController::class, 'townSearch'])->name("services.townSearch");
+
+
 
 
 Route::group(["prefix" => "admin"], function(){
 
     Route::post('/authenticatedUser', [UserController::class, 'getAuthenticatedUser'])->name("admin.authenticatedUser");
+
+    Route::get('/showToken', [UserController::class, 'showToken'])->name("admin.showToken");
 
     Route::post('/register', [UserController::class, 'register'])->name("admin.register");
 

@@ -102,4 +102,21 @@ class UserController extends Controller
 
         }
     }
+
+    public function showToken() {
+
+        try{
+
+            return response()->json(["success" => true,"message" => "Data obtained successfully", "csrfToken"=>csrf_field()]);
+
+
+        }catch(\Exception $e){
+
+          Log::error($e);
+
+          return response()->json(["success" => false, "message" => "There was an error when registering"], 200);
+
+        }
+  
+    }
 }
