@@ -9,6 +9,7 @@ use App\Http\Controllers\File\FileController;
 use App\Http\Controllers\Vehicle\VehicleController;
 use App\Http\Controllers\Group\GroupController;
 use App\Http\Controllers\Town\TownController;
+use App\Http\Controllers\ServiceType\ServiceTypeController;
 
 
 
@@ -24,8 +25,6 @@ use App\Http\Controllers\Town\TownController;
 */
 
 
-
-
 route::get('/services', [ServiceController::class, 'getServices'])->name("services");
 
 route::get('/services/{id}', [ServiceController::class, 'getService'])->name("services.service");
@@ -35,6 +34,11 @@ route::get('/towns/{town}', [TownController::class, 'getTowns'])->name("towns.to
 route::post('/services/town-search/', [TownController::class, 'townSearch'])->name("services.townSearch");
 
 route::get('/airports', [AirportController::class, 'list'])->name("airport.list");
+
+route::get('/service-types/service/{service_id}', [ServiceTypeController::class, 'ServiceTypeSearch'])->name("serviceTypes.serviceType");
+
+route::get('/service-types/info/{service_type_id}', [ServiceTypeController::class, 'ServiceTypeInfoSearch'])->name("serviceTypes.info");
+
 
 Route::group(["prefix" => "admin"], function(){
 

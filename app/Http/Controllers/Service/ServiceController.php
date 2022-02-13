@@ -395,8 +395,6 @@ class ServiceController extends Controller
                     'prices'               =>$service->Prices,
                     ];
 
-                $services['prices']=$prices;
-
 
             }
               
