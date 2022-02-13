@@ -34,8 +34,7 @@ route::get('/towns/{town}', [TownController::class, 'getTowns'])->name("towns.to
 
 route::post('/services/town-search/', [TownController::class, 'townSearch'])->name("services.townSearch");
 
-
-
+route::get('/airports', [AirportController::class, 'list'])->name("airport.list");
 
 Route::group(["prefix" => "admin"], function(){
 
