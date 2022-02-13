@@ -392,7 +392,7 @@ class ServiceController extends Controller
                     'apply_sold_out'       =>$service->apply_sold_out==0?'false':'true',
                     'is_sold_out'          =>$service->is_sold_out==0?'false':'true',
                     'purchase_advice'      =>$service->purchase_advice,
-                    'prices'               =>$service->Prices ,
+                    'prices'               =>$service->Prices,
                     ];
 
                 $services['prices']=$prices;
@@ -436,7 +436,7 @@ class ServiceController extends Controller
                     'apply_sold_out'       =>$service->apply_sold_out==0?'false':'true',
                     'is_sold_out'          =>$service->is_sold_out==0?'false':'true',
                     'purchase_advice'      =>$service->purchase_advice,
-                    'prices'               =>$service->Prices  ,
+                    'prices'               =>$service->Prices,
                     ];
 
             }
