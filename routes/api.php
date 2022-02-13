@@ -10,7 +10,7 @@ use App\Http\Controllers\Vehicle\VehicleController;
 use App\Http\Controllers\Group\GroupController;
 use App\Http\Controllers\Town\TownController;
 use App\Http\Controllers\ServiceType\ServiceTypeController;
-
+use App\Http\Controllers\Checkout\CheckoutController;
 
 
 /*
@@ -39,6 +39,7 @@ route::get('/service-types/service/{service_id}', [ServiceTypeController::class,
 
 route::get('/service-types/info/{service_type_id}', [ServiceTypeController::class, 'ServiceTypeInfoSearch'])->name("serviceTypes.info");
 
+route::post('checkout/encrypt-total', [CheckoutController::class, 'EncryptTotal'])->name("checkout.EncryptTotal");
 
 Route::group(["prefix" => "admin"], function(){
 

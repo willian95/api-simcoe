@@ -2,6 +2,8 @@
 
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Crypt;
+
 function picture($request,$id)
 {
 
@@ -26,3 +28,16 @@ function picture($request,$id)
 
     return $fileRoute;
 }
+
+function encryptValue($value){
+
+    return (Crypt::encryptString($value));
+
+}
+
+function decryptStringValue($value){
+
+    return (Crypt::decryptString($value));
+
+}
+
