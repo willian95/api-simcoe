@@ -43,6 +43,7 @@ route::get('/service-types/info/{service_type_id}', [ServiceTypeController::clas
 
 route::post('checkout/encrypt-total', [CheckoutController::class, 'EncryptTotal'])->name("checkout.EncryptTotal");
 
+route::post('/checkout', [CheckoutController::class, 'checkout'])->name("checkout.checkout");
 
 Route::group(["prefix" => "admin"], function(){
 
